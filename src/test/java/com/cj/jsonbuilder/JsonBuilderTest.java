@@ -26,14 +26,35 @@ public class JsonBuilderTest {
     public void testSimpleUnJsonification(){
     	String arrayString = "[{\"field1\":\"Field1\",\"field2\":\"Field2\"}]";
     	List<UninterestingObject> obj = JsonParser.<UninterestingObject>parseArray(arrayString, arrayElement ->
-    	JsonParser.<UninterestingObject>parseObject(arrayElement, element->
-    			new UninterestingObject(element.get("field1").toString(), element.get("field2").toString())
-    		)
-    	);
+                        JsonParser.<UninterestingObject>parseObject(arrayElement, element ->
+                                        new UninterestingObject(element.get("field1").toString(), element.get("field2").toString())
+                        )
+        );
     	
     	assertEquals(obj.get(0).field1, "Field1");
     	assertEquals(obj.get(0).field2, "Field2");
     }
+
+    @Test
+    public void testNullsHandling(){
+        UninterestingObject uninterestingObject = new UninterestingObject("null", null);
+        String jsonString = new JsonObjectBuilder()
+                .with("field1", uninterestingObject.field1)
+                .with("field2", uninterestingObject.field2)
+                .build().toJSONString();
+
+        assertEquals("{\"field1\":\"null\"}", jsonString);
+
+        jsonString = new JsonObjectBuilder()
+                .withAsString("field1", uninterestingObject.field1)
+                .withAsString("field2", uninterestingObject.field2)
+                .build().toJSONString();
+
+        assertEquals("{\"field1\":\"null\"}", jsonString);
+
+    }
+
+
     
     class UninterestingObject{
         public final String field1;

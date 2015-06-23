@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 public class JsonObjectBuilder{
     private JSONObject object = new JSONObject();
     public JsonObjectBuilder with(String key, String value){
+        if(value ==null) return this;
         object.put(key, value);
         return this;
     }
@@ -18,7 +19,8 @@ public class JsonObjectBuilder{
     }
 
     public JsonObjectBuilder withAsString(String key, Object value){
-        return with(key, value.toString());
+        if(value ==null) return this;
+        return  with(key, value.toString());
     }
 
     public JSONObject build(){
