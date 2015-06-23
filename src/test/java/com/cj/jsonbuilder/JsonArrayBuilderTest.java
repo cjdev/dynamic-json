@@ -13,13 +13,13 @@ public class JsonArrayBuilderTest {
     @Test
     public void testListOfLongs() {
         //given
-        List<Number> longs = new ArrayList<>();
+        List<Long> longs = new ArrayList<>();
         longs.add(1l);
         longs.add(2l);
         longs.add(3l);
 
         //when
-        String jsonString = new JsonArrayBuilder().withNumbers(longs).build().toJSONString();
+        String jsonString = JsonArrayBuilder.ofLongs(longs).toJSONString();
 
         //then
         assertThat("list of longs should not be a list of objects", jsonString, is("[1,2,3]"));
