@@ -9,26 +9,28 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class JsonArrayBuilder {
+public class JsonArrayBuilder <T>{
     private JSONArray object = new JSONArray();
-    public JsonArrayBuilder with(JSONAware value){
+    public JsonArrayBuilder<T> with(JSONAware value){
         object.add(value);
         return this;
     }
-    public JsonArrayBuilder with(String value){
+    public JsonArrayBuilder<T> with(String value){
         object.add(value);
         return this;
     }
 
-    public JsonArrayBuilder withAll(Collection<JSONAware> objects) {
+    public JsonArrayBuilder<T> withAll(Collection<JSONAware> objects) {
         object.addAll(objects);
         return this;
     }
 
     public static <T> JSONArray of(List<T> things, Function<T, JSONObject> mapToJsonObject){
-        return new JsonArrayBuilder().withAll(things.stream().map(mapToJsonObject).collect(Collectors.toList())).build();
+        return new JsonArrayBuilder<T>().withAll(things.stream().map(mapToJsonObject).collect(Collectors.toList())).build();
     }
     public JSONArray build(){
         return object;
     }
+    
+
 }
