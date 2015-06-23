@@ -25,9 +25,15 @@ public class JsonArrayBuilder {
         return this;
     }
 
+    public JsonArrayBuilder withNumbers(Collection<Number> objects) {
+        object.addAll(objects);
+        return this;
+    }
+
     public static <T> JSONArray of(List<T> things, Function<T, JSONObject> mapToJsonObject){
         return new JsonArrayBuilder().withAll(things.stream().map(mapToJsonObject).collect(Collectors.toList())).build();
     }
+
     public JSONArray build(){
         return object;
     }
