@@ -25,15 +25,6 @@ public class JsonArrayBuilder <T>{
         return this;
     }
 
-    public JsonArrayBuilder withLongs(Collection<Long> longs) {
-        object.addAll(longs);
-        return this;
-    }
-
-    public static JSONArray ofLongs(Collection<Long> longs) {
-        return new JsonArrayBuilder().withLongs(longs).build();
-    }
-
     public static <T> JSONArray of(List<T> things, Function<T, JSONObject> mapToJsonObject){
         return new JsonArrayBuilder<T>().withAll(things.stream().map(mapToJsonObject).collect(Collectors.toList())).build();
     }
