@@ -14,6 +14,7 @@ public class JsonObjectBuilder{
         return this;
     }
     public JsonObjectBuilder with(String key, JSONAware value){
+    	if(value ==null) return this;
         object.put(key, value);
         return this;
     }
