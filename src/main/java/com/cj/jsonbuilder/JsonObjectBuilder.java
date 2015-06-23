@@ -17,6 +17,10 @@ public class JsonObjectBuilder{
         return this;
     }
 
+    public JsonObjectBuilder withAsString(String key, Object value){
+        return with(key, value.toString());
+    }
+
     public JSONObject build(){
         return object;
     }
