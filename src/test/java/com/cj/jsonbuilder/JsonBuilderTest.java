@@ -37,20 +37,20 @@ public class JsonBuilderTest {
 
     @Test
     public void testNullsHandling(){
-        UninterestingObject uninterestingObject = new UninterestingObject("null", null);
+
         String jsonString = new JsonObjectBuilder()
-                .with("field1", uninterestingObject.field1)
-                .with("field2", uninterestingObject.field2)
+                .with("field1", "null")
+                .with("field2", (String)null)
                 .build().toJSONString();
 
         assertEquals("{\"field1\":\"null\"}", jsonString);
 
         jsonString = new JsonObjectBuilder()
-                .withAsString("field1", uninterestingObject.field1)
-                .withAsString("field2", uninterestingObject.field2)
+                .withAsString("field1", null)
+                .withAsString("field2", "null")
                 .build().toJSONString();
 
-        assertEquals("{\"field1\":\"null\"}", jsonString);
+        assertEquals("{\"field2\":\"null\"}", jsonString);
 
     }
 
