@@ -37,7 +37,6 @@ public class JsonBuilderTest {
 
     @Test
     public void testNullsHandling(){
-
         String jsonString = new JsonObjectBuilder()
                 .with("field1", "null")
                 .with("field2", (String)null)
@@ -54,6 +53,24 @@ public class JsonBuilderTest {
 
     }
 
+
+    @Test
+    public void testNumbersAndStrings(){
+        List<Number> numbers = new ArrayList<Number>();
+        numbers.add(null);
+        numbers.add(345);
+        String jsonString = JsonArrayBuilder.ofNumbers(numbers).toJSONString();
+
+        assertEquals("[345]", jsonString);
+
+        List<String> strings = new ArrayList<String>();
+        strings.add(null);
+        strings.add("string");
+        jsonString = JsonArrayBuilder.ofStrings(strings).toJSONString();
+
+        assertEquals("[\"string\"]", jsonString);
+
+    }
 
     
     class UninterestingObject{

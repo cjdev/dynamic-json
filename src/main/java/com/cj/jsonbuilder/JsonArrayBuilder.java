@@ -25,13 +25,38 @@ public class JsonArrayBuilder <T>{
         return this;
     }
 
-    public static <T> JSONArray of(List<T> things, Function<T, JSONObject> mapToJsonObject){
+
+    public static JSONArray ofNumbers(Collection<Number> things){
+        return new JsonArrayBuilder<Number>().withAllNumbers(things).build();
+    }
+
+    public static JSONArray ofStrings(Collection<String> things){
+        return new JsonArrayBuilder<Number>().withAllStrings(things).build();
+    }
+
+
+
+    public static <T> JSONArray of(Collection<T> things, Function<T, JSONObject> mapToJsonObject){
         return new JsonArrayBuilder<T>().withAll(things.stream().map(mapToJsonObject).collect(Collectors.toList())).build();
     }
 
     public JSONArray build(){
         return object;
     }
-    
+
+
+
+    private JsonArrayBuilder withAllNumbers(Collection<Number> objects) {
+        object.addAll(removeNulls(objects));
+        return this;
+    }
+    private JsonArrayBuilder withAllStrings(Collection<String> things) {
+        object.addAll(removeNulls(things));
+        return this;
+    }
+
+    private <T> Collection<T> removeNulls(Collection<T> c){
+        return c.stream().filter(o->o!=null).collect(Collectors.toList());
+    }
 
 }
