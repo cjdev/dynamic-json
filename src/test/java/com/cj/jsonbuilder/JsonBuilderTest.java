@@ -26,7 +26,7 @@ public class JsonBuilderTest {
     public void testSimpleUnJsonification(){
     	String arrayString = "[{\"field1\":\"Field1\",\"field2\":\"Field2\"}]";
     	List<UninterestingObject> obj = JsonParser.<UninterestingObject>parseArray(arrayString, arrayElement ->
-                        JsonParser.<UninterestingObject>parseObject(arrayElement, element ->
+                        JsonParser.<UninterestingObject>parseObject(arrayElement.orElse(null), element ->
                                         new UninterestingObject(element.getString("field1").orElse(null), element.getString("field2").orElse(null))
                         )
         );
@@ -36,7 +36,7 @@ public class JsonBuilderTest {
     }
 
     @Test
-    public void testNullsHandling(){
+    public void testNullDehydrationHandling(){
         String jsonString = new JsonObjectBuilder()
                 .with("field1", "null")
                 .with("field2", (String)null)
@@ -51,8 +51,7 @@ public class JsonBuilderTest {
 
         assertEquals("[]", JsonArrayFactory.ofNumbers(null).toJSONString());
     }
-
-
+    
     @Test
     public void testNumbersAndStrings(){
         List<Integer> numbers = new ArrayList<Integer>();
