@@ -26,7 +26,7 @@ public class JsonArrayBuilder <T>{
     }
 
 
-    public static JSONArray ofNumbers(Collection<Number> things){
+    public static JSONArray ofNumbers(Collection<? extends Number> things){
         return new JsonArrayBuilder<Number>().withAllNumbers(things).build();
     }
 
@@ -46,7 +46,7 @@ public class JsonArrayBuilder <T>{
 
 
 
-    private JsonArrayBuilder withAllNumbers(Collection<Number> objects) {
+    private JsonArrayBuilder withAllNumbers(Collection<? extends Number> objects) {
         object.addAll(removeNulls(objects));
         return this;
     }

@@ -56,7 +56,7 @@ public class JsonBuilderTest {
 
     @Test
     public void testNumbersAndStrings(){
-        List<Number> numbers = new ArrayList<Number>();
+        List<Integer> numbers = new ArrayList<Integer>();
         numbers.add(null);
         numbers.add(345);
         String jsonString = JsonArrayBuilder.ofNumbers(numbers).toJSONString();
