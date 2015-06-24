@@ -41,16 +41,15 @@ public class JsonBuilderTest {
                 .with("field1", "null")
                 .with("field2", (String)null)
                 .build().toJSONString();
-
         assertEquals("{\"field1\":\"null\"}", jsonString);
 
         jsonString = new JsonObjectBuilder()
                 .withAsString("field1", null)
                 .withAsString("field2", "null")
                 .build().toJSONString();
-
         assertEquals("{\"field2\":\"null\"}", jsonString);
 
+        assertEquals("[]", JsonArrayBuilder.ofNumbers(null).toJSONString());
     }
 
 

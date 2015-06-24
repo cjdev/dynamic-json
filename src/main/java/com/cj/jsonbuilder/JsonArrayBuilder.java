@@ -11,16 +11,17 @@ import org.json.simple.JSONObject;
 
 public class JsonArrayBuilder <T>{
     private JSONArray object = new JSONArray();
-    public JsonArrayBuilder<T> with(JSONAware value){
+    private JsonArrayBuilder(){}
+    private JsonArrayBuilder<T> with(JSONAware value){
         object.add(value);
         return this;
     }
-    public JsonArrayBuilder<T> with(String value){
+    private JsonArrayBuilder<T> with(String value){
         object.add(value);
         return this;
     }
 
-    public JsonArrayBuilder<T> withAll(Collection<JSONAware> objects) {
+    private JsonArrayBuilder<T> withAll(Collection<JSONAware> objects) {
         object.addAll(objects);
         return this;
     }
@@ -47,6 +48,7 @@ public class JsonArrayBuilder <T>{
 
 
     private JsonArrayBuilder withAllNumbers(Collection<? extends Number> objects) {
+    	if(objects == null) return this;
         object.addAll(removeNulls(objects));
         return this;
     }
