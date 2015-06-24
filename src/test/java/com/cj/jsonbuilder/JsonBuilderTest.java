@@ -27,7 +27,7 @@ public class JsonBuilderTest {
     	String arrayString = "[{\"field1\":\"Field1\",\"field2\":\"Field2\"}]";
     	List<UninterestingObject> obj = JsonParser.<UninterestingObject>parseArray(arrayString, arrayElement ->
                         JsonParser.<UninterestingObject>parseObject(arrayElement, element ->
-                                        new UninterestingObject(element.get("field1").toString(), element.get("field2").toString())
+                                        new UninterestingObject(element.getString("field1").orElse(null), element.getString("field2").orElse(null))
                         )
         );
     	
