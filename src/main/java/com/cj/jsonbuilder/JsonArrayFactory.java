@@ -9,36 +9,36 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
-public class JsonArrayBuilder <T>{
+public class JsonArrayFactory <T>{
     private JSONArray object = new JSONArray();
-    private JsonArrayBuilder(){}
-    private JsonArrayBuilder<T> with(JSONAware value){
+    private JsonArrayFactory(){}
+    private JsonArrayFactory<T> with(JSONAware value){
         object.add(value);
         return this;
     }
-    private JsonArrayBuilder<T> with(String value){
+    private JsonArrayFactory<T> with(String value){
         object.add(value);
         return this;
     }
 
-    private JsonArrayBuilder<T> withAll(Collection<JSONAware> objects) {
+    private JsonArrayFactory<T> withAll(Collection<JSONAware> objects) {
         object.addAll(objects);
         return this;
     }
 
 
     public static JSONArray ofNumbers(Collection<? extends Number> things){
-        return new JsonArrayBuilder<Number>().withAllNumbers(things).build();
+        return new JsonArrayFactory<Number>().withAllNumbers(things).build();
     }
 
     public static JSONArray ofStrings(Collection<String> things){
-        return new JsonArrayBuilder<Number>().withAllStrings(things).build();
+        return new JsonArrayFactory<Number>().withAllStrings(things).build();
     }
 
 
 
     public static <T> JSONArray of(Collection<T> things, Function<T, JSONObject> mapToJsonObject){
-        return new JsonArrayBuilder<T>().withAll(things.stream().map(mapToJsonObject).collect(Collectors.toList())).build();
+        return new JsonArrayFactory<T>().withAll(things.stream().map(mapToJsonObject).collect(Collectors.toList())).build();
     }
 
     public JSONArray build(){
@@ -47,12 +47,12 @@ public class JsonArrayBuilder <T>{
 
 
 
-    private JsonArrayBuilder withAllNumbers(Collection<? extends Number> objects) {
+    private JsonArrayFactory withAllNumbers(Collection<? extends Number> objects) {
     	if(objects == null) return this;
         object.addAll(removeNulls(objects));
         return this;
     }
-    private JsonArrayBuilder withAllStrings(Collection<String> things) {
+    private JsonArrayFactory withAllStrings(Collection<String> things) {
         object.addAll(removeNulls(things));
         return this;
     }

@@ -13,7 +13,7 @@ public class JsonBuilderTest {
         List<UninterestingObject> uninterestingObjects = new ArrayList<UninterestingObject>();
         uninterestingObjects.add(new UninterestingObject("Field1", "Field2"));
         
-        String jsonString = JsonArrayBuilder.of(uninterestingObjects, (object) ->
+        String jsonString = JsonArrayFactory.of(uninterestingObjects, (object) ->
             new JsonObjectBuilder()
                     .with("field1", object.field1)
                     .with("field2", object.field2)
@@ -49,7 +49,7 @@ public class JsonBuilderTest {
                 .build().toJSONString();
         assertEquals("{\"field2\":\"null\"}", jsonString);
 
-        assertEquals("[]", JsonArrayBuilder.ofNumbers(null).toJSONString());
+        assertEquals("[]", JsonArrayFactory.ofNumbers(null).toJSONString());
     }
 
 
@@ -58,14 +58,14 @@ public class JsonBuilderTest {
         List<Integer> numbers = new ArrayList<Integer>();
         numbers.add(null);
         numbers.add(345);
-        String jsonString = JsonArrayBuilder.ofNumbers(numbers).toJSONString();
+        String jsonString = JsonArrayFactory.ofNumbers(numbers).toJSONString();
 
         assertEquals("[345]", jsonString);
 
         List<String> strings = new ArrayList<String>();
         strings.add(null);
         strings.add("string");
-        jsonString = JsonArrayBuilder.ofStrings(strings).toJSONString();
+        jsonString = JsonArrayFactory.ofStrings(strings).toJSONString();
 
         assertEquals("[\"string\"]", jsonString);
 
