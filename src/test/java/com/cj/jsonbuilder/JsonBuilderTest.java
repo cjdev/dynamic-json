@@ -25,7 +25,7 @@ public class JsonBuilderTest {
     @Test
     public void testSimpleUnJsonification(){
     	String arrayString = "[{\"field1\":\"Field1\",\"field2\":\"Field2\"}]";
-    	List<UninterestingObject> obj = JsonParser.<UninterestingObject>parseArray(arrayString, arrayElement ->
+    	List<UninterestingObject> obj = JsonParser.<UninterestingObject>parseArrayOptional(arrayString, arrayElement ->
                         JsonParser.<UninterestingObject>parseObject(arrayElement.orElse(null), element ->
                                         new UninterestingObject(element.getString("field1").orElse(null), element.getString("field2").orElse(null))
                         )

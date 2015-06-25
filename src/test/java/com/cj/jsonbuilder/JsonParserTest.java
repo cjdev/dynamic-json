@@ -11,18 +11,26 @@ public class JsonParserTest {
     @Test
     public void testEmptyListHydrationHandling(){
         String jsonString = "[]";
-		List<String> result = JsonParser.parseArray(jsonString, o->o.orElse("").toString());
+		List<String> result = JsonParser.parseArray(jsonString, o->o.toString());
 		
         assertEquals(0, result.size());
     }
     
     @Test
-    public void testNullListHydrationHandling(){
+    public void testNullListHydrationHandlingOptional(){
         String jsonString = "[null]";
-		List<Optional<String>> result = JsonParser.parseArray(jsonString, o->o);
+		List<Optional<String>> result = JsonParser.parseArrayOptional(jsonString, o->o);
 		
         assertEquals(1, result.size());
         assertEquals(Optional.empty(), result.get(0));
+    }
+    
+    @Test
+    public void testNullListHydrationHandling(){
+        String jsonString = "[null]";
+		List<String> result = JsonParser.parseArray(jsonString, o->o);
+		
+        assertEquals(0, result.size());
     }
     
     @Test
