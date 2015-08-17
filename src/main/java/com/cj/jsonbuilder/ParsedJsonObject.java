@@ -18,7 +18,7 @@ public class ParsedJsonObject {
 	}
 	
 	public Optional<Long> getLong(String key){
-		return getString(key).map(Long::valueOf);
+		return getString(key).map(o->o.equals("") ? null : Long.valueOf(o));
 	}
 	
 	private Optional<Object> get(String key){

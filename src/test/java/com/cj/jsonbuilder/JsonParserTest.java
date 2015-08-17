@@ -1,6 +1,7 @@
 package com.cj.jsonbuilder;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +42,14 @@ public class JsonParserTest {
     	assertEquals(Long.valueOf(-1), JsonParser.<Long>parseObject(jsonStringWithNull, o->o.getLong("key").orElse(-1l)));
     	assertEquals(Long.valueOf(1), JsonParser.<Long>parseObject(jsonString, o->o.getLong("key").get()));
     	assertEquals(Optional.empty(), JsonParser.<Optional<Long>>parseObject(emptyString, o->o.getLong("key")));
+    }
+
+    @Test
+    public void parseEmptyStringIntoEmptyLong() {
+        String jsonString = "{\"key\":\"\"}";
+
+        assertFalse("An empty string representing a long should be parsed into an empty optional",
+                JsonParser.parseObject(jsonString, o -> o.getLong("key").isPresent()));
     }
     
     class UninterestingObject{
