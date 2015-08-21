@@ -13,22 +13,26 @@ public class ParsedJsonObject {
 		this.internalObject = internalObject;
 	}
 	public Optional<String> getString(String key){
-		return get(key).map(Object::toString);
+		return getObjectInternal(key).map(Object::toString);
+	}
+	
+	public <T>Optional<T> get(String key, Function<String, T> mapper){
+		return getString(key).map(mapper);
 	}
 	
 	public Optional<Double> getDouble(String key){
-		return getString(key).map(Double::valueOf);
+		return get(key, Double::valueOf);
 	}
 	
 	public Optional<Long> getLong(String key){
-		return getString(key).map(o->o.equals("") ? null : Long.valueOf(o));
+		return get(key, Long::valueOf);
 	}
 	
-	public <T> List<T> getArray(String key, Function<String, T> mapper){
+	public <T> List<T> getList(String key, Function<String, T> mapper){
 		return getString(key).map(value->JsonParser.parseArray(value, mapper)).orElse(Collections.emptyList());
 	}
 	
-	private Optional<Object> get(String key){
+	private Optional<Object> getObjectInternal(String key){
 		if(internalObject==null) return Optional.empty();
 		return Optional.ofNullable(internalObject.get(key));
 	}
