@@ -17,7 +17,11 @@ public class ParsedJsonObject {
 	}
 	
 	public <T>Optional<T> get(String key, Function<String, T> mapper){
-		return getString(key).map(mapper);
+		try{
+			return getString(key).map(mapper);
+		}catch(Exception e){
+			return Optional.empty();
+		}
 	}
 	
 	public Optional<Double> getDouble(String key){
