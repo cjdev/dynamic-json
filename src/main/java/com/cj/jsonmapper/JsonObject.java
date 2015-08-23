@@ -2,25 +2,25 @@ package com.cj.jsonmapper;
 
 import org.json.simple.JSONObject;
 
-public class JsonObjectBuilder{
+public class JsonObject{
     private JSONObject object = new JSONObject();
     
-    public JsonObjectBuilder(){}
+    public JsonObject(){}
     
-    public JsonObjectBuilder with(String key, String value){
+    public JsonObject with(String key, String value){
         return append(key, value);
     }
     
-	public JsonObjectBuilder with(String key, JsonObjectBuilder value){
+	public JsonObject with(String key, JsonObject value){
     	return append(key, value.getInternalObject());
     }
 
-    public JsonObjectBuilder with(String key, JsonArray value){
+    public JsonObject with(String key, JsonArray value){
     	if(value == null) return this;
     	return append(key, value.getInternalObject());
     }
     
-    public JsonObjectBuilder withAsString(String key, Object value){
+    public JsonObject withAsString(String key, Object value){
         if(value == null) return this;
         return  with(key, value.toString());
     }
@@ -33,13 +33,13 @@ public class JsonObjectBuilder{
         return object;
     }
     
-    private JsonObjectBuilder append(String key, Object value){
+    private JsonObject append(String key, Object value){
     	JSONObject newObject = new JSONObject();
     	newObject.putAll(this.object);
     	if(value!=null) newObject.put(key, value);
-    	return new JsonObjectBuilder(newObject);
+    	return new JsonObject(newObject);
     }
-    private JsonObjectBuilder(JSONObject state) {
+    private JsonObject(JSONObject state) {
     	this();
 		this.object=state;
 	}

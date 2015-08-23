@@ -24,8 +24,8 @@ public class JsonArray <T>{
         return new JsonArray<T>().withAll(objects.stream().map(mapToJsonObject).map(JsonArray::getInternalObject).collect(Collectors.toList()));
     }
     
-    public static <T> JsonArray<T> of(Collection<T> objects, Function<T, JsonObjectBuilder> mapToJsonObject){
-        return new JsonArray<T>().withAll(objects.stream().map(mapToJsonObject).map(JsonObjectBuilder::getInternalObject).collect(Collectors.toList()));
+    public static <T> JsonArray<T> of(Collection<T> objects, Function<T, JsonObject> mapToJsonObject){
+        return new JsonArray<T>().withAll(objects.stream().map(mapToJsonObject).map(JsonObject::getInternalObject).collect(Collectors.toList()));
     }
     
     public String toJson(){

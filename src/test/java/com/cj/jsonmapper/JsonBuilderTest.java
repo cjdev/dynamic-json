@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.cj.jsonmapper.JsonArray;
-import com.cj.jsonmapper.JsonObjectBuilder;
+import com.cj.jsonmapper.JsonObject;
 
 public class JsonBuilderTest {
     @Test
@@ -17,7 +17,7 @@ public class JsonBuilderTest {
         uninterestingObjects.add(new UninterestingObject("Field1", "Field2"));
         
         String jsonString = JsonArray.of(uninterestingObjects, (object) ->
-            new JsonObjectBuilder()
+            new JsonObject()
                     .with("field1", object.field1)
                     .with("field2", object.field2)
             ).toJson();
@@ -27,13 +27,13 @@ public class JsonBuilderTest {
     
     @Test
     public void testNullDehydrationHandling(){
-        String jsonString = new JsonObjectBuilder()
+        String jsonString = new JsonObject()
                 .with("field1", "null")
                 .with("field2", (String)null)
                 .getInternalObject().toJSONString();
         assertEquals("{\"field1\":\"null\"}", jsonString);
 
-        jsonString = new JsonObjectBuilder()
+        jsonString = new JsonObject()
                 .withAsString("field1", null)
                 .withAsString("field2", "null")
                 .getInternalObject().toJSONString();
