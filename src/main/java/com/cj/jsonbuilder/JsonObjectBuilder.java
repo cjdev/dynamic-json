@@ -23,7 +23,12 @@ public class JsonObjectBuilder{
         if(value ==null) return this;
         return  with(key, value.toString());
     }
+    
+    public String toJson(){
+    	return object.toJSONString();
+    }
 
+    @Deprecated //Leaky Abstraction
     public JSONObject build(){
         return object;
     }

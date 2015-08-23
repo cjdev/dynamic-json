@@ -2,9 +2,9 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cj</groupId>
-    <artifactId>json-builders</artifactId>
+    <artifactId>json-mapper</artifactId>
     <packaging>jar</packaging>
-    <name>Simple Framework-Free Jsonification</name>
+    <name>Library for working with JSON using Java 8 Streams and Lambdas</name>
     <version>1.8-SNAPSHOT</version>
 
     <properties>

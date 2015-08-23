@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.junit.Test;
 
+import com.cj.jsonbuilder.JsonBuilderTest.UninterestingObject;
+
 public class JsonParserTest {
     @Test
     public void testEmptyListHydrationHandling(){
@@ -50,6 +52,19 @@ public class JsonParserTest {
 
         assertFalse("An empty string representing a long should be parsed into an empty optional",
                 JsonParser.parseObject(jsonString, o -> o.getLong("key").isPresent()));
+    }
+    
+    @Test
+    public void testSimpleUnJsonification(){
+    	String arrayString = "[{\"field1\":\"Field1\",\"field2\":\"Field2\"}]";
+    	List<UninterestingObject> obj = JsonParser.parseArrayOptional(arrayString, arrayElement ->
+                        JsonParser.parseObject(arrayElement.orElse(null), element ->
+                                        new UninterestingObject(element.getString("field1").orElse(null), element.getString("field2").orElse(null))
+                        )
+        );
+    	
+    	assertEquals(obj.get(0).field1, "Field1");
+    	assertEquals(obj.get(0).field2, "Field2");
     }
     
     class UninterestingObject{
