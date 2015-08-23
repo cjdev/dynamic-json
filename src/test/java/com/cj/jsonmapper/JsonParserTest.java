@@ -68,6 +68,12 @@ public class JsonParserTest {
     	assertEquals(obj.get(0).field2, "Field2");
     }
     
+    @Test(expected=JsonParseException.class)
+    public void unparsableJsonShouldThrowAUsefulException(){
+    	String badJson = "[[";
+    	JsonParser.parseArray(badJson, o->"String");
+    }
+    
     class UninterestingObject{
         public final String field1;
         public final String field2;
