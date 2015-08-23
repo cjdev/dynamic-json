@@ -20,7 +20,7 @@ public class JsonArray <T>{
         return new JsonArray<String>().withAllStrings(strings);
     }
 
-    public static <T> JsonArray<T> ofArrays(Collection<T> objects, Function<T, JsonArray> mapToJsonObject){
+    public static <T> JsonArray<T> ofArrays(Collection<T> objects, Function<T, JsonArray<T>> mapToJsonObject){
         return new JsonArray<T>().withAll(objects.stream().map(mapToJsonObject).map(JsonArray::getInternalObject).collect(Collectors.toList()));
     }
     

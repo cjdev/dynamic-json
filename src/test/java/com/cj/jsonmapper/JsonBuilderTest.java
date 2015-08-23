@@ -20,9 +20,9 @@ public class JsonBuilderTest {
             new JsonObjectBuilder()
                     .with("field1", object.field1)
                     .with("field2", object.field2)
-                    ).toJson();
+            ).toJson();
                     
-        assertEquals("[{\"field1\":\"Field1\",\"field2\":\"Field2\"}]", jsonString);
+        assertEquals("[{\"field2\":\"Field2\",\"field1\":\"Field1\"}]", jsonString);
     }
     
     @Test
