@@ -1,4 +1,4 @@
-package com.cj.jsonbuilder;
+package com.cj.jsonmapper;
 
 import java.util.ArrayList;
 import java.util.List;

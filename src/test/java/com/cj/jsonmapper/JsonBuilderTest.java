@@ -1,4 +1,4 @@
-package com.cj.jsonbuilder;
+package com.cj.jsonmapper;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,37 +7,39 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.cj.jsonmapper.JsonArray;
+import com.cj.jsonmapper.JsonObjectBuilder;
+
 public class JsonBuilderTest {
     @Test
     public void testSimpleJsoninification(){
         List<UninterestingObject> uninterestingObjects = new ArrayList<UninterestingObject>();
         uninterestingObjects.add(new UninterestingObject("Field1", "Field2"));
         
-        String jsonString = JsonArrayFactory.of(uninterestingObjects, (object) ->
+        String jsonString = JsonArray.of(uninterestingObjects, (object) ->
             new JsonObjectBuilder()
                     .with("field1", object.field1)
                     .with("field2", object.field2)
-                    .build()).toJSONString();
+                    ).toJson();
                     
         assertEquals("[{\"field1\":\"Field1\",\"field2\":\"Field2\"}]", jsonString);
     }
     
-
     @Test
     public void testNullDehydrationHandling(){
         String jsonString = new JsonObjectBuilder()
                 .with("field1", "null")
                 .with("field2", (String)null)
-                .build().toJSONString();
+                .getInternalObject().toJSONString();
         assertEquals("{\"field1\":\"null\"}", jsonString);
 
         jsonString = new JsonObjectBuilder()
                 .withAsString("field1", null)
                 .withAsString("field2", "null")
-                .build().toJSONString();
+                .getInternalObject().toJSONString();
         assertEquals("{\"field2\":\"null\"}", jsonString);
 
-        assertEquals("[]", JsonArrayFactory.ofNumbers(null).toJSONString());
+        assertEquals("[]", JsonArray.ofNumbers(null).toJson());
     }
     
     @Test
@@ -45,14 +47,14 @@ public class JsonBuilderTest {
         List<Integer> numbers = new ArrayList<Integer>();
         numbers.add(null);
         numbers.add(345);
-        String jsonString = JsonArrayFactory.ofNumbers(numbers).toJSONString();
+        String jsonString = JsonArray.ofNumbers(numbers).toJson();
 
         assertEquals("[345]", jsonString);
 
         List<String> strings = new ArrayList<String>();
         strings.add(null);
         strings.add("string");
-        jsonString = JsonArrayFactory.ofStrings(strings).toJSONString();
+        jsonString = JsonArray.ofStrings(strings).toJson();
 
         assertEquals("[\"string\"]", jsonString);
 

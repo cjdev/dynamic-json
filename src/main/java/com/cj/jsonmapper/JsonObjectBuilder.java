@@ -1,10 +1,6 @@
-package com.cj.jsonbuilder;
+package com.cj.jsonmapper;
 
-
-
-import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
-
 
 public class JsonObjectBuilder{
     private JSONObject object = new JSONObject();
@@ -13,12 +9,18 @@ public class JsonObjectBuilder{
         object.put(key, value);
         return this;
     }
-    public JsonObjectBuilder with(String key, JSONAware value){
+    public JsonObjectBuilder with(String key, JsonObjectBuilder value){
     	if(value ==null) return this;
-        object.put(key, value);
+        object.put(key, value.getInternalObject());
         return this;
     }
 
+    public JsonObjectBuilder with(String key, JsonArray value){
+    	if(value ==null) return this;
+        object.put(key, value.getInternalObject());
+        return this;
+    }
+    
     public JsonObjectBuilder withAsString(String key, Object value){
         if(value ==null) return this;
         return  with(key, value.toString());
@@ -28,8 +30,7 @@ public class JsonObjectBuilder{
     	return object.toJSONString();
     }
 
-    @Deprecated //Leaky Abstraction
-    public JSONObject build(){
+    protected JSONObject getInternalObject(){
         return object;
     }
     

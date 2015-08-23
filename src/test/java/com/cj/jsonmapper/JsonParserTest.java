@@ -1,4 +1,4 @@
-package com.cj.jsonbuilder;
+package com.cj.jsonmapper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -8,7 +8,8 @@ import java.util.Optional;
 
 import org.junit.Test;
 
-import com.cj.jsonbuilder.JsonBuilderTest.UninterestingObject;
+import com.cj.jsonmapper.JsonParser;
+import com.cj.jsonmapper.JsonBuilderTest.UninterestingObject;
 
 public class JsonParserTest {
     @Test

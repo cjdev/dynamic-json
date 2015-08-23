@@ -77,8 +77,6 @@
                     <includes>
                         <include>**/*Test.groovy</include>
                         <include>**/*Test.java</include>
-                        <include>**/*Integration.java</include>
-                        <include>**/*Spec.java</include>
                     </includes>
                     <excludes>
                     </excludes>
