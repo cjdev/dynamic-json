@@ -28,16 +28,14 @@ public class Examples {
 	
 	@Test
 	public void findCheapestBookStream(){
-		Optional<Double> price = JsonParser.parseArrayOfObjects(books, book->book.getDouble("price").orElse(Double.MAX_VALUE))
-				.stream()
+		Optional<Double> price = JsonParser.objects(books).map(book->book.getDouble("price").orElse(Double.MAX_VALUE))
 				.min(Double::compareTo);
 		assertEquals(price, Optional.of(5.65));
 	}
 	
 	@Test
 	public void findAllBooksWrittenByJim(){
-		List<String> booksByJim = JsonParser.parseArrayOfObjects(books, Function.identity())
-				.stream()
+		List<String> booksByJim = JsonParser.objects(books)
 				.filter(book->book.getList("authors", String::toString).contains("Jim Houndface"))
 				.map(book->book.getString("title").orElse("No Title Found"))
 				.collect(Collectors.toList());
@@ -47,11 +45,10 @@ public class Examples {
 	
 	@Test
 	public void toDto(){
-		List<Book> bookObjects = JsonParser.parseArrayOfObjects(books, mapper);
+		List<Book> bookObjects = JsonParser.objects(books).map(mapper).collect(Collectors.toList());
 		assertEquals(3, bookObjects.size());
 		assertEquals(2, bookObjects.get(1).authors.size());
 	}
-	
 	
 	class Book{
 		public List<String> authors;

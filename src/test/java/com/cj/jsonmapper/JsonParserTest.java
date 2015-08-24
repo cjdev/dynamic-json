@@ -1,21 +1,19 @@
 package com.cj.jsonmapper;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
-
-import com.cj.jsonmapper.JsonParser;
-import com.cj.jsonmapper.JsonBuilderTest.UninterestingObject;
 
 public class JsonParserTest {
     @Test
     public void testEmptyListHydrationHandling(){
         String jsonString = "[]";
-		List<String> result = JsonParser.parseArray(jsonString, o->o.toString());
+		List<String> result = JsonParser.array(jsonString, o->o.toString());
 		
         assertEquals(0, result.size());
     }
@@ -23,7 +21,7 @@ public class JsonParserTest {
     @Test
     public void testNullListHydrationHandlingOptional(){
         String jsonString = "[null]";
-		List<Optional<String>> result = JsonParser.parseArrayOptional(jsonString, o->o);
+		List<Optional<String>> result = JsonParser.arrayOptional(jsonString, o->o);
 		
         assertEquals(1, result.size());
         assertEquals(Optional.empty(), result.get(0));
@@ -32,7 +30,7 @@ public class JsonParserTest {
     @Test
     public void testNullListHydrationHandling(){
         String jsonString = "[null]";
-		List<String> result = JsonParser.parseArray(jsonString, o->o);
+		List<String> result = JsonParser.array(jsonString, o->o);
 		
         assertEquals(0, result.size());
     }
@@ -42,9 +40,9 @@ public class JsonParserTest {
     	String jsonString = "{\"key\":1}";
     	String jsonStringWithNull = "{\"key\":null}";
     	String emptyString = "{}";
-    	assertEquals(Long.valueOf(-1), JsonParser.<Long>parseObject(jsonStringWithNull, o->o.getLong("key").orElse(-1l)));
-    	assertEquals(Long.valueOf(1), JsonParser.<Long>parseObject(jsonString, o->o.getLong("key").get()));
-    	assertEquals(Optional.empty(), JsonParser.<Optional<Long>>parseObject(emptyString, o->o.getLong("key")));
+    	assertEquals(Long.valueOf(-1), JsonParser.<Long>object(jsonStringWithNull, o->o.getLong("key").orElse(-1l)));
+    	assertEquals(Long.valueOf(1), JsonParser.<Long>object(jsonString, o->o.getLong("key").get()));
+    	assertEquals(Optional.empty(), JsonParser.<Optional<Long>>object(emptyString, o->o.getLong("key")));
     }
 
     @Test
@@ -52,14 +50,14 @@ public class JsonParserTest {
         String jsonString = "{\"key\":\"\"}";
 
         assertFalse("An empty string representing a long should be parsed into an empty optional",
-                JsonParser.parseObject(jsonString, o -> o.getLong("key").isPresent()));
+                JsonParser.object(jsonString, o -> o.getLong("key").isPresent()));
     }
     
     @Test
     public void testSimpleUnJsonification(){
     	String arrayString = "[{\"field1\":\"Field1\",\"field2\":\"Field2\"}]";
-    	List<UninterestingObject> obj = JsonParser.parseArrayOptional(arrayString, arrayElement ->
-                        JsonParser.parseObject(arrayElement.orElse(null), element ->
+    	List<UninterestingObject> obj = JsonParser.arrayOptional(arrayString, arrayElement ->
+                        JsonParser.object(arrayElement.orElse(null), element ->
                                         new UninterestingObject(element.getString("field1").orElse(null), element.getString("field2").orElse(null))
                         )
         );
@@ -71,7 +69,15 @@ public class JsonParserTest {
     @Test(expected=JsonParseException.class)
     public void unparsableJsonShouldThrowAUsefulException(){
     	String badJson = "[[";
-    	JsonParser.parseArray(badJson, o->"String");
+    	JsonParser.array(badJson, o->"String");
+    }
+    
+    @Test
+    public void canParseAnArrayOfArrays(){
+    	String arrayOfArrays = "[[[\"a1\"],[\"a2\"]],[[\"b1\"],[\"b2\"]]]";
+    	List<String> result =  JsonParser.objects(arrayOfArrays).flatMap(ParsedJsonObject::stream).flatMap(ParsedJsonObject::strings).collect(Collectors.toList());
+    	
+    	assertTrue(result.contains("a1"));
     }
     
     class UninterestingObject{
