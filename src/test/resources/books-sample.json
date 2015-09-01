@@ -1,0 +1,25 @@
+[
+  {
+    "title": "Dog Lovers",
+    "authors": [
+      "Arnold Sweitcher",
+      "Jim Houndface"
+    ],
+    "price": "5.65"
+  },
+  {
+    "title": "Cat Lovers",
+    "authors": [
+      "David Munchkin",
+      "Jim Houndface"
+    ],
+    "price": "5.99"
+  },
+  {
+    "title": "Webster's Dictionary",
+    "authors": [
+      "Webster"
+    ],
+    "price": "12.00"
+  }
+]

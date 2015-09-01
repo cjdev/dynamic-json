@@ -18,13 +18,8 @@ public class Examples {
 		bookToReturn.authors = bookRow.getList("authors", o->o.toString());
 		return bookToReturn;
 	};
-	
-	
-	final String books = "["
-				+ "{\"title\": \"Dog Lovers\", \"authors\":[\"Arnold Sweitcher\", \"Jim Houndface\"], \"price\":\"5.65\"},"
-				+ "{\"title\": \"Cat Lovers\", \"authors\":[\"David Munchkin\", \"Jim Houndface\"], \"price\":\"5.99\"},"
-				+ "{\"title\": \"Webster's Dictionary\", \"authors\":[\"Webster\"], \"price\":\"12.00\"}"
-			+ "]";
+
+    final String books = TestHelper.loadResourceAsString("books-sample.json");
 	
 	@Test
 	public void findCheapestBookStream(){
@@ -36,8 +31,8 @@ public class Examples {
 	@Test
 	public void findAllBooksWrittenByJim(){
 		List<String> booksByJim = JsonParser.objects(books)
-				.filter(book->book.getList("authors", String::toString).contains("Jim Houndface"))
-				.map(book->book.getString("title").orElse("No Title Found"))
+				.filter(book -> book.getList("authors", String::toString).contains("Jim Houndface"))
+				.map(book -> book.getString("title").orElse("No Title Found"))
 				.collect(Collectors.toList());
 		assertTrue(booksByJim.contains("Dog Lovers"));
 		assertTrue(booksByJim.contains("Cat Lovers"));
