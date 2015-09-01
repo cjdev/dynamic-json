@@ -13,7 +13,7 @@ public class JsonParserTest {
     @Test
     public void testEmptyListHydrationHandling(){
         String jsonString = "[]";
-		List<String> result = JsonParser.array(jsonString, o->o.toString());
+		List<String> result = JsonParser.array(jsonString, String::toString);
 		
         assertEquals(0, result.size());
     }

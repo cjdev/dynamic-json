@@ -15,7 +15,7 @@ public class Examples {
 		Book bookToReturn = new Book();
 		bookToReturn.price = BigDecimal.valueOf(bookRow.getDouble("price").orElse(Double.MAX_VALUE));
 		bookToReturn.title = bookRow.getString("Title").orElse("No Title Found");
-		bookToReturn.authors = bookRow.getList("authors", o->o.toString());
+		bookToReturn.authors = bookRow.getList("authors", String::toString);
 		return bookToReturn;
 	};
 
