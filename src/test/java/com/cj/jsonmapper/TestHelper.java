@@ -1,6 +1,9 @@
 package com.cj.jsonmapper;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
 public class TestHelper {
@@ -9,8 +12,8 @@ public class TestHelper {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
         StringBuilder stringBuilder = new StringBuilder();
         int currentChar = read(inputStreamReader);
-        while(currentChar != -1) {
-            stringBuilder.append((char)currentChar);
+        while (currentChar != -1) {
+            stringBuilder.append((char) currentChar);
             currentChar = read(inputStreamReader);
         }
         close(inputStreamReader);
@@ -25,7 +28,7 @@ public class TestHelper {
         }
     }
 
-    private static void close(Reader reader){
+    private static void close(Reader reader) {
         try {
             reader.close();
         } catch (IOException e) {

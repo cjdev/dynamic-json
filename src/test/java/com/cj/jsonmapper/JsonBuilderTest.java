@@ -1,35 +1,32 @@
 package com.cj.jsonmapper;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.cj.jsonmapper.JsonArray;
-import com.cj.jsonmapper.JsonObject;
+import static org.junit.Assert.assertEquals;
 
 public class JsonBuilderTest {
     @Test
-    public void testSimpleJsoninification(){
+    public void testSimpleJsoninification() {
         List<UninterestingObject> uninterestingObjects = new ArrayList<UninterestingObject>();
         uninterestingObjects.add(new UninterestingObject("Field1", "Field2"));
-        
+
         String jsonString = JsonArray.of(uninterestingObjects, (object) ->
-            new JsonObject()
-                    .with("field1", object.field1)
-                    .with("field2", object.field2)
-            ).toJson();
-                    
+                        new JsonObject()
+                                .with("field1", object.field1)
+                                .with("field2", object.field2)
+        ).toJson();
+
         assertEquals("[{\"field2\":\"Field2\",\"field1\":\"Field1\"}]", jsonString);
     }
-    
+
     @Test
-    public void testNullDehydrationHandling(){
+    public void testNullDehydrationHandling() {
         String jsonString = new JsonObject()
                 .with("field1", "null")
-                .with("field2", (String)null)
+                .with("field2", (String) null)
                 .getInternalObject().toJSONString();
         assertEquals("{\"field1\":\"null\"}", jsonString);
 
@@ -41,9 +38,9 @@ public class JsonBuilderTest {
 
         assertEquals("[]", JsonArray.ofNumbers(null).toJson());
     }
-    
+
     @Test
-    public void testNumbersAndStrings(){
+    public void testNumbersAndStrings() {
         List<Integer> numbers = new ArrayList<Integer>();
         numbers.add(null);
         numbers.add(345);
@@ -60,13 +57,14 @@ public class JsonBuilderTest {
 
     }
 
-    
-    class UninterestingObject{
+
+    class UninterestingObject {
         public final String field1;
         public final String field2;
-        public UninterestingObject(String field1, String field2){
-        	this.field1 = field1;
-        	this.field2 = field2;
+
+        public UninterestingObject(String field1, String field2) {
+            this.field1 = field1;
+            this.field2 = field2;
         }
     }
 }
