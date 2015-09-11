@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static com.cj.jsonmapper.TestHelper.*;
 
 public class JsonBuilderTest {
     @Test
@@ -13,13 +14,14 @@ public class JsonBuilderTest {
         List<UninterestingObject> uninterestingObjects = new ArrayList<UninterestingObject>();
         uninterestingObjects.add(new UninterestingObject("Field1", "Field2"));
 
-        String jsonString = JsonArray.of(uninterestingObjects, (object) ->
+        String actual = JsonArray.of(uninterestingObjects, (object) ->
                         new JsonObject()
                                 .with("field1", object.field1)
                                 .with("field2", object.field2)
         ).toJson();
 
-        assertEquals("[{\"field2\":\"Field2\",\"field1\":\"Field1\"}]", jsonString);
+        String expected = loadResourceAsString("array-of-simple-map.json");
+        assertEquals(normalize(expected), normalize(actual));
     }
 
     @Test

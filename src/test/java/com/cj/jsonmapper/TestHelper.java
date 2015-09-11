@@ -1,5 +1,7 @@
 package com.cj.jsonmapper;
 
+import org.json.simple.JSONValue;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,6 +20,12 @@ public class TestHelper {
         }
         close(inputStreamReader);
         return stringBuilder.toString();
+    }
+
+    public static String normalize(String json){
+        Object parsed = JSONValue.parse(json);
+        String normalized = JSONValue.toJSONString(parsed);
+        return normalized;
     }
 
     private static int read(Reader reader) {
