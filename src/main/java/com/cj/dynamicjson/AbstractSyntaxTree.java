@@ -4,33 +4,33 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public class AbstractSyntaxTree {
-    public abstract static class JsonAst {
-        public String asString() {
+    public interface JsonAst {
+        default String asString() {
             throw new RuntimeException(String.format("Can not convert %s to a String", this));
         }
 
-        public BigDecimal asBigDecimal() {
+        default BigDecimal asBigDecimal() {
             throw new RuntimeException(String.format("Can not convert %s to a BigDecimal", this));
         }
 
-        public boolean asBoolean() {
+        default boolean asBoolean() {
             throw new RuntimeException(String.format("Can not convert %s to a boolean", this));
         }
 
-        public boolean isNull() {
+        default boolean isNull() {
             throw new RuntimeException(String.format("Can not convert %s to a null", this));
         }
 
-        public List<JsonAst> asList() {
+        default List<JsonAst> asList() {
             throw new RuntimeException(String.format("Can not convert %s to an array", this));
         }
 
-        public Map<String, JsonAst> asMap() {
+        default Map<String, JsonAst> asMap() {
             throw new RuntimeException(String.format("Can not convert %s to an object", this));
         }
     }
 
-    public static class JsonString extends JsonAst {
+    public static class JsonString implements JsonAst {
         public final String value;
 
         public JsonString(String value) {
@@ -48,7 +48,7 @@ public class AbstractSyntaxTree {
         }
     }
 
-    public static class JsonNumber extends JsonAst {
+    public static class JsonNumber implements JsonAst {
         public final BigDecimal value;
 
         public JsonNumber(BigDecimal value) {
@@ -66,7 +66,7 @@ public class AbstractSyntaxTree {
         }
     }
 
-    public static class JsonBoolean extends JsonAst {
+    public static class JsonBoolean implements JsonAst {
         public final boolean value;
 
         public JsonBoolean(boolean value) {
@@ -84,7 +84,7 @@ public class AbstractSyntaxTree {
         }
     }
 
-    public static class JsonNull extends JsonAst {
+    public static class JsonNull implements JsonAst {
         public static final JsonNull instance = new JsonNull();
 
         private JsonNull() {
@@ -101,7 +101,7 @@ public class AbstractSyntaxTree {
         }
     }
 
-    public static class JsonArray extends JsonAst {
+    public static class JsonArray implements JsonAst {
         private final List<JsonAst> array;
 
         public JsonArray(List<JsonAst> array) {
@@ -120,7 +120,7 @@ public class AbstractSyntaxTree {
         }
     }
 
-    public static class JsonObject extends JsonAst {
+    public static class JsonObject implements JsonAst {
         private final Map<String, JsonAst> object;
 
         public JsonObject(Map<String, JsonAst> object) {
