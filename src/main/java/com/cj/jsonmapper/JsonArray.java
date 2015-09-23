@@ -1,11 +1,12 @@
 package com.cj.jsonmapper;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONAware;
-
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONAware;
 
 public class JsonArray<T> {
     private JSONArray object = new JSONArray();
@@ -24,9 +25,13 @@ public class JsonArray<T> {
     public static <T> JsonArray<T> ofArrays(Collection<T> objects, Function<T, JsonArray<T>> mapToJsonObject) {
         return new JsonArray<T>().withAll(objects.stream().map(mapToJsonObject).map(JsonArray::getInternalObject).collect(Collectors.toList()));
     }
-
+    
+    public static <T> JsonArray<T> of(Stream<T> objects, Function<T, JsonObject> mapToJsonObject) {
+        return new JsonArray<T>().withAll(objects.map(mapToJsonObject).map(JsonObject::getInternalObject).collect(Collectors.toList()));
+    }
+    
     public static <T> JsonArray<T> of(Collection<T> objects, Function<T, JsonObject> mapToJsonObject) {
-        return new JsonArray<T>().withAll(objects.stream().map(mapToJsonObject).map(JsonObject::getInternalObject).collect(Collectors.toList()));
+        return of(objects.stream(), mapToJsonObject);
     }
 
     public String toJson() {
