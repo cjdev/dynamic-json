@@ -1,12 +1,11 @@
-package com.cj.jsonmapper;
+package com.cj.dynamicjson.simplejson;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cj.jsonmapper.TestHelper.loadResourceAsString;
-import static com.cj.jsonmapper.TestHelper.normalize;
 import static org.junit.Assert.assertEquals;
 
 public class JsonBuilderTest {
@@ -21,8 +20,8 @@ public class JsonBuilderTest {
                                 .with("field2", object.field2)
         ).toJson();
 
-        String expected = loadResourceAsString("array-of-simple-map.json");
-        assertEquals(normalize(expected), normalize(actual));
+        String expected = TestHelper.loadResourceAsString("array-of-simple-map.json");
+        Assert.assertEquals(TestHelper.normalize(expected), TestHelper.normalize(actual));
     }
 
     @Test

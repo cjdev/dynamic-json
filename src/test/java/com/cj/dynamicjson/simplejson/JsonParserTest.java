@@ -1,5 +1,8 @@
-package com.cj.jsonmapper;
+package com.cj.dynamicjson.simplejson;
 
+import com.cj.dynamicjson.simplejson.JsonParseException;
+import com.cj.dynamicjson.simplejson.JsonParser;
+import com.cj.dynamicjson.simplejson.ParsedJsonObject;
 import org.junit.Test;
 
 import java.util.List;

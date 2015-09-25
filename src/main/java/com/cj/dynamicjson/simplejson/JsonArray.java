@@ -1,4 +1,4 @@
-package com.cj.jsonmapper;
+package com.cj.dynamicjson.simplejson;
 
 import java.util.Collection;
 import java.util.function.Function;

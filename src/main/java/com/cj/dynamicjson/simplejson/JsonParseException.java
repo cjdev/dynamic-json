@@ -1,4 +1,4 @@
-package com.cj.jsonmapper;
+package com.cj.dynamicjson.simplejson;
 
 public class JsonParseException extends RuntimeException {
 

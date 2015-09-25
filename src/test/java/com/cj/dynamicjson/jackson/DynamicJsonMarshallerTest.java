@@ -1,4 +1,4 @@
-package com.cj.dynamicjson;
+package com.cj.dynamicjson.jackson;
 
 import com.cj.dynamicjson.jackson.DynamicJsonMarshaller;
 import org.junit.Test;
