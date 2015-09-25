@@ -1,5 +1,6 @@
-package com.cj.dynamicjson;
+package com.cj.dynamicjson.jackson;
 
+import com.cj.dynamicjson.Marshaller;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonToken;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 
 import static com.cj.dynamicjson.AbstractSyntaxTree.*;
 
-public class DynamicJsonMarshaller {
+public class DynamicJsonMarshaller implements Marshaller {
     public static final DynamicJsonMarshaller instance = new DynamicJsonMarshaller();
 
     private DynamicJsonMarshaller() {
@@ -19,14 +20,17 @@ public class DynamicJsonMarshaller {
 
     private UncheckedJsonFactory factory = new UncheckedJsonFactory(new JsonFactory());
 
-    public JsonAst parse(InputStream jsonText) {
-        UncheckedJsonParser parser = factory.createParser(jsonText);
-        parser.nextToken();
-        return consumeJson(parser);
+    @Override
+    public JsonAst parse(String jsonText) {
+        return parse(factory.createParser(jsonText));
     }
 
-    public JsonAst parse(String jsonText) {
-        UncheckedJsonParser parser = factory.createParser(jsonText);
+    @Override
+    public JsonAst parse(InputStream jsonText) {
+        return parse(factory.createParser(jsonText));
+    }
+
+    private JsonAst parse(UncheckedJsonParser parser) {
         parser.nextToken();
         return consumeJson(parser);
     }

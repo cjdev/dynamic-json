@@ -1,5 +1,6 @@
 package com.cj.dynamicjson;
 
+import com.cj.dynamicjson.jackson.DynamicJsonMarshaller;
 import org.junit.Test;
 
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package com.cj.dynamicjson;
+package com.cj.dynamicjson.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
