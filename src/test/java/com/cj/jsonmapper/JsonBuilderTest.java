@@ -5,8 +5,9 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cj.jsonmapper.TestHelper.loadResourceAsString;
+import static com.cj.jsonmapper.TestHelper.normalize;
 import static org.junit.Assert.assertEquals;
-import static com.cj.jsonmapper.TestHelper.*;
 
 public class JsonBuilderTest {
     @Test

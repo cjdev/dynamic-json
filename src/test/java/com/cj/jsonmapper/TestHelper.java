@@ -22,7 +22,7 @@ public class TestHelper {
         return stringBuilder.toString();
     }
 
-    public static String normalize(String json){
+    public static String normalize(String json) {
         Object parsed = JSONValue.parse(json);
         String normalized = JSONValue.toJSONString(parsed);
         return normalized;
