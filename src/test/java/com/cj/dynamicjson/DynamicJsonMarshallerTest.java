@@ -9,6 +9,8 @@ import java.util.Map;
 
 import static com.cj.dynamicjson.AbstractSyntaxTree.JsonAst;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class DynamicJsonMarshallerTest {
@@ -132,5 +134,17 @@ public class DynamicJsonMarshallerTest {
         assertThat(glossSeeAlso.size(), is(2));
         assertThat(glossSeeAlso.get(0).asString(), is("GML"));
         assertThat(glossSeeAlso.get(1).asString(), is("XML"));
+    }
+
+    @Test
+    public void nullCanBeTreatedAsAnyType() {
+        String jsonText = "null";
+        JsonAst ast = marshaller.parse(jsonText);
+        assertThat(ast.isNull(), is(true));
+        assertThat(ast.asBigDecimal(), is(nullValue()));
+        assertThat(ast.asList(), is(nullValue()));
+        assertThat(ast.asMap(), is(nullValue()));
+        assertThat(ast.asString(), is(nullValue()));
+        assertThat(ast.asBoolean(), is(nullValue()));
     }
 }

@@ -13,7 +13,7 @@ public class AbstractSyntaxTree {
             throw new RuntimeException(String.format("Can not convert %s to a BigDecimal", this));
         }
 
-        default boolean asBoolean() {
+        default Boolean asBoolean() {
             throw new RuntimeException(String.format("Can not convert %s to a boolean", this));
         }
 
@@ -74,7 +74,7 @@ public class AbstractSyntaxTree {
         }
 
         @Override
-        public boolean asBoolean() {
+        public Boolean asBoolean() {
             return value;
         }
 
@@ -93,6 +93,31 @@ public class AbstractSyntaxTree {
         @Override
         public boolean isNull() {
             return true;
+        }
+
+        @Override
+        public String asString() {
+            return null;
+        }
+
+        @Override
+        public BigDecimal asBigDecimal() {
+            return null;
+        }
+
+        @Override
+        public Boolean asBoolean() {
+            return null;
+        }
+
+        @Override
+        public List<JsonAst> asList() {
+            return null;
+        }
+
+        @Override
+        public Map<String, JsonAst> asMap() {
+            return null;
         }
 
         @Override
