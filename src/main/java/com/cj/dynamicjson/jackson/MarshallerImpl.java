@@ -12,10 +12,10 @@ import java.util.Map;
 
 import static com.cj.dynamicjson.AbstractSyntaxTree.*;
 
-public class DynamicJsonMarshaller implements Marshaller {
-    public static final DynamicJsonMarshaller instance = new DynamicJsonMarshaller();
+public class MarshallerImpl implements Marshaller {
+    public static final MarshallerImpl instance = new MarshallerImpl();
 
-    private DynamicJsonMarshaller() {
+    private MarshallerImpl() {
     }
 
     private UncheckedJsonFactory factory = new UncheckedJsonFactory(new JsonFactory());

@@ -5,27 +5,39 @@ import java.util.*;
 
 public class AbstractSyntaxTree {
     public interface JsonAst {
-        default String asString() {
+        default String aString() {
             throw new RuntimeException(String.format("Can not convert %s to a String", this));
         }
 
-        default BigDecimal asBigDecimal() {
+        default Optional<String> oString() {
+            return Optional.ofNullable(aString());
+        }
+
+        default BigDecimal aBigDecimal() {
             throw new RuntimeException(String.format("Can not convert %s to a BigDecimal", this));
         }
 
-        default Boolean asBoolean() {
+        default Optional<BigDecimal> oBigDecimal() {
+            return Optional.ofNullable(aBigDecimal());
+        }
+
+        default Boolean aBoolean() {
             throw new RuntimeException(String.format("Can not convert %s to a boolean", this));
+        }
+
+        default Optional<Boolean> oBoolean() {
+            return Optional.ofNullable(aBoolean());
         }
 
         default boolean isNull() {
             throw new RuntimeException(String.format("Can not convert %s to a null", this));
         }
 
-        default List<JsonAst> asList() {
+        default List<JsonAst> list() {
             throw new RuntimeException(String.format("Can not convert %s to an array", this));
         }
 
-        default Map<String, JsonAst> asMap() {
+        default Map<String, JsonAst> map() {
             throw new RuntimeException(String.format("Can not convert %s to an object", this));
         }
     }
@@ -38,7 +50,7 @@ public class AbstractSyntaxTree {
         }
 
         @Override
-        public String asString() {
+        public String aString() {
             return value;
         }
 
@@ -56,7 +68,7 @@ public class AbstractSyntaxTree {
         }
 
         @Override
-        public BigDecimal asBigDecimal() {
+        public BigDecimal aBigDecimal() {
             return value;
         }
 
@@ -74,7 +86,7 @@ public class AbstractSyntaxTree {
         }
 
         @Override
-        public Boolean asBoolean() {
+        public Boolean aBoolean() {
             return value;
         }
 
@@ -96,28 +108,28 @@ public class AbstractSyntaxTree {
         }
 
         @Override
-        public String asString() {
+        public String aString() {
             return null;
         }
 
         @Override
-        public BigDecimal asBigDecimal() {
+        public BigDecimal aBigDecimal() {
             return null;
         }
 
         @Override
-        public Boolean asBoolean() {
+        public Boolean aBoolean() {
             return null;
         }
 
         @Override
-        public List<JsonAst> asList() {
-            return null;
+        public List<JsonAst> list() {
+            return Collections.emptyList();
         }
 
         @Override
-        public Map<String, JsonAst> asMap() {
-            return null;
+        public Map<String, JsonAst> map() {
+            return Collections.emptyMap();
         }
 
         @Override
@@ -134,7 +146,7 @@ public class AbstractSyntaxTree {
         }
 
         @Override
-        public List<JsonAst> asList() {
+        public List<JsonAst> list() {
             return array;
         }
 
@@ -153,7 +165,7 @@ public class AbstractSyntaxTree {
         }
 
         @Override
-        public Map<String, JsonAst> asMap() {
+        public Map<String, JsonAst> map() {
             return object;
         }
 
