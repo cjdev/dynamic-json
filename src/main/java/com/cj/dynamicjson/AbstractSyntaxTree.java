@@ -30,7 +30,7 @@ public class AbstractSyntaxTree {
         }
 
         default boolean isNull() {
-            throw new RuntimeException(String.format("Can not convert %s to a null", this));
+            return false;
         }
 
         default List<JsonAst> list() {

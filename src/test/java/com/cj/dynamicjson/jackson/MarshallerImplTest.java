@@ -19,6 +19,7 @@ public class MarshallerImplTest {
     public void jsonString() {
         String jsonText = "\"Hello, world!\"";
         JsonAst ast = marshaller.parse(jsonText);
+        assertThat(ast.isNull(), is(false));
         assertThat(ast.aString(), is("Hello, world!"));
         assertThat(ast.toString(), is("String(Hello, world!)"));
     }
@@ -27,6 +28,7 @@ public class MarshallerImplTest {
     public void jsonNumber() {
         String jsonText = "123.456";
         JsonAst ast = marshaller.parse(jsonText);
+        assertThat(ast.isNull(), is(false));
         assertThat(ast.aBigDecimal(), is(new BigDecimal("123.456")));
         assertThat(ast.toString(), is("Number(123.456)"));
     }
@@ -35,6 +37,7 @@ public class MarshallerImplTest {
     public void jsonTrue() {
         String jsonText = "true";
         JsonAst ast = marshaller.parse(jsonText);
+        assertThat(ast.isNull(), is(false));
         assertThat(ast.aBoolean(), is(true));
         assertThat(ast.toString(), is("Boolean(true)"));
     }
@@ -43,6 +46,7 @@ public class MarshallerImplTest {
     public void jsonFalse() {
         String jsonText = "false";
         JsonAst ast = marshaller.parse(jsonText);
+        assertThat(ast.isNull(), is(false));
         assertThat(ast.aBoolean(), is(false));
         assertThat(ast.toString(), is("Boolean(false)"));
     }
@@ -60,6 +64,7 @@ public class MarshallerImplTest {
         String jsonText = "[]";
         JsonAst ast = marshaller.parse(jsonText);
         List<JsonAst> list = ast.list();
+        assertThat(ast.isNull(), is(false));
         assertThat(list.size(), is(0));
         assertThat(ast.toString(), is("Array()"));
     }
@@ -69,6 +74,7 @@ public class MarshallerImplTest {
         String jsonText = "[ \"foo\" ]";
         JsonAst ast = marshaller.parse(jsonText);
         List<JsonAst> list = ast.list();
+        assertThat(ast.isNull(), is(false));
         assertThat(list.size(), is(1));
         assertThat(list.get(0).aString(), is("foo"));
         assertThat(ast.toString(), is("Array(String(foo))"));
@@ -79,6 +85,7 @@ public class MarshallerImplTest {
         String jsonText = "[ \"foo\", 123.456, false]";
         JsonAst ast = marshaller.parse(jsonText);
         List<JsonAst> list = ast.list();
+        assertThat(ast.isNull(), is(false));
         assertThat(list.size(), is(3));
         assertThat(list.get(0).aString(), is("foo"));
         assertThat(list.get(1).aBigDecimal(), is(new BigDecimal("123.456")));
@@ -91,6 +98,7 @@ public class MarshallerImplTest {
         String jsonText = "{}";
         JsonAst ast = marshaller.parse(jsonText);
         Map<String, JsonAst> map = ast.map();
+        assertThat(ast.isNull(), is(false));
         assertThat(map.size(), is(0));
         assertThat(ast.toString(), is("Object()"));
     }
@@ -100,6 +108,7 @@ public class MarshallerImplTest {
         String jsonText = "{ \"a\": \"foo\" }";
         JsonAst ast = marshaller.parse(jsonText);
         Map<String, JsonAst> map = ast.map();
+        assertThat(ast.isNull(), is(false));
         assertThat(map.size(), is(1));
         assertThat(map.get("a").aString(), is("foo"));
         assertThat(ast.toString(), is("Object(a -> String(foo))"));
@@ -110,6 +119,7 @@ public class MarshallerImplTest {
         String jsonText = "{ \"b\": \"foo\", \"a\": 123.456, \"c\": true}";
         JsonAst ast = marshaller.parse(jsonText);
         Map<String, JsonAst> map = ast.map();
+        assertThat(ast.isNull(), is(false));
         assertThat(map.size(), is(3));
         assertThat(map.get("a").aBigDecimal(), is(new BigDecimal("123.456")));
         assertThat(map.get("b").aString(), is("foo"));
