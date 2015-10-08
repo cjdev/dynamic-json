@@ -9,10 +9,9 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
 public class MarshallerImpl{
-    public static final MarshallerImpl instance = new MarshallerImpl();
     private final JSONParser parser;
     
-    private MarshallerImpl() {
+    public MarshallerImpl() {
         parser = new JSONParser();
     }
 

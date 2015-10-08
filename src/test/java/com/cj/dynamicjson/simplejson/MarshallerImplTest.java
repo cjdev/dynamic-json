@@ -18,7 +18,7 @@ import org.junit.Test;
 import com.cj.dynamicjson.AbstractSyntaxTree.JsonAst;
 
 public class MarshallerImplTest {
-    private MarshallerImpl marshaller = MarshallerImpl.instance;
+    private MarshallerImpl marshaller = new MarshallerImpl();
 
     @Test
     public void jsonString() {
