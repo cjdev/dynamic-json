@@ -1,7 +1,12 @@
 package com.cj.dynamicjson;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class AbstractSyntaxTree {
     public interface JsonAst {
@@ -39,6 +44,10 @@ public class AbstractSyntaxTree {
 
         default Map<String, JsonAst> map() {
             throw new RuntimeException(String.format("Can not convert %s to an object", this));
+        }
+
+        default JsonObject object(){
+            return new JsonObject(map());
         }
     }
 
@@ -168,7 +177,15 @@ public class AbstractSyntaxTree {
         public Map<String, JsonAst> map() {
             return object;
         }
+        
+        public JsonAst get(String key){
+            return oGet(key).orElse(JsonNull.instance);
+        }
 
+        public Optional<JsonAst> oGet(String key){
+            return Optional.ofNullable(map().get(key));
+        }
+        
         @Override
         public String toString() {
             //Sort the keys to make toString deterministic

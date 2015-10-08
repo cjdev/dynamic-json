@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
+@Deprecated
 public class JsonParserTest {
     @Test
     public void testEmptyListHydrationHandling() {
@@ -36,10 +37,12 @@ public class JsonParserTest {
 
     @Test
     public void primitiveParsing() {
-        String jsonString = "{\"key\":1}";
+        String jsonStringWithLong = "{\"key\":1}";
         String jsonStringWithNull = "{\"key\":null}";
         String emptyString = "{}";
+        String jsonString = "{\"key\":\"1\"}";
         assertEquals(Long.valueOf(-1), JsonParser.<Long>object(jsonStringWithNull, o -> o.getLong("key").orElse(-1l)));
+        assertEquals(Long.valueOf(1), JsonParser.<Long>object(jsonStringWithLong, o -> o.getLong("key").get()));
         assertEquals(Long.valueOf(1), JsonParser.<Long>object(jsonString, o -> o.getLong("key").get()));
         assertEquals(Optional.empty(), JsonParser.<Optional<Long>>object(emptyString, o -> o.getLong("key")));
     }

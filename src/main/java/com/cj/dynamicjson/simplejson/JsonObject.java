@@ -2,6 +2,7 @@ package com.cj.dynamicjson.simplejson;
 
 import org.json.simple.JSONObject;
 
+@Deprecated
 public class JsonObject {
     private JSONObject object = new JSONObject();
 

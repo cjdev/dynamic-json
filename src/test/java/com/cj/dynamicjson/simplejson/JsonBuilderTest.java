@@ -8,6 +8,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@Deprecated
 public class JsonBuilderTest {
     @Test
     public void testSimpleJsoninification() {
