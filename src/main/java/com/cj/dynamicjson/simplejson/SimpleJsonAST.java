@@ -17,10 +17,10 @@ import com.cj.dynamicjson.AbstractSyntaxTree.JsonAst;
 public class SimpleJsonAST implements JsonAst{
  final Object jsonValue;
     
-    public SimpleJsonAST(Object jsonValue){
+    SimpleJsonAST(Object jsonValue){
         this.jsonValue = jsonValue;
     }
-
+    
     @Override
     public String aString() {
        return tryCatch(()->jsonValue.toString()).orElse("null");
