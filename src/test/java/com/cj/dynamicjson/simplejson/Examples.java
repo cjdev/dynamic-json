@@ -29,7 +29,7 @@ public class Examples {
 
     @Test
     public void findCheapestBookStream() {
-      Optional<Double> price = MarshallerImpl.parse(books).list().stream()
+      Optional<Double> price = Marshaller.parse(books).list().stream()
               .map(book -> book.object().oGet("price").flatMap(JsonAst::oBigDecimal).orElse(BigDecimal.valueOf(Double.MAX_VALUE)))
               .min(BigDecimal::compareTo)
               .map(BigDecimal::doubleValue);
@@ -39,7 +39,7 @@ public class Examples {
 
     @Test
     public void findAllBooksWrittenByJim() {
-        List<String> booksByJim =  MarshallerImpl.parse(books).list().stream()
+        List<String> booksByJim =  Marshaller.parse(books).list().stream()
               .filter(book -> book.object().get("authors").list().stream().map(JsonAst::toString).collect(Collectors.toList()).contains("Jim Houndface"))
               .map(book -> book.object().get("title").oString().orElse("No Title Found"))
               .collect(Collectors.toList());
@@ -50,7 +50,7 @@ public class Examples {
 
     @Test
     public void toDto() {
-        List<Book> bookObjects =  MarshallerImpl.parse(books).list().stream().map(mapper).collect(Collectors.toList());
+        List<Book> bookObjects =  Marshaller.parse(books).list().stream().map(mapper).collect(Collectors.toList());
         assertEquals(3, bookObjects.size());
         assertEquals(2, bookObjects.get(1).authors.size());
     }

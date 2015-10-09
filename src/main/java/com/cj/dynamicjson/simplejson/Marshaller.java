@@ -8,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
-public class MarshallerImpl{
-    private MarshallerImpl(){}
+public class Marshaller{
+    private Marshaller(){}
     
     public static SimpleJsonAST parse(String jsonText) {
         return parse(new ByteArrayInputStream(jsonText.getBytes(StandardCharsets.UTF_8)));
