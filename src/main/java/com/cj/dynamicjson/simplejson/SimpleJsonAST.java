@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -57,14 +58,17 @@ public class SimpleJsonAST implements JsonAst{
     }
 
     @Override
-    public List<JsonAst> list() {
-        return (List<JsonAst>) 
+    public Stream<JsonAst> stream() {
+        return (Stream<JsonAst>) 
                 tryCatch(()->((JSONArray)jsonValue)
                         .stream()
-                        .map(SimpleJsonAST::new)
-                        .collect(Collectors.toList()))
-                .orElse(Collections.emptyList());
+                        .map(SimpleJsonAST::new))
+                .orElse(Collections.emptyList().stream());
         
+    }
+    
+    public List<JsonAst> list(){
+        return stream().collect(Collectors.toList());
     }
 
     //Use object() instead.  This may become private soon.

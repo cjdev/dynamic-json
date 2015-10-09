@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AbstractSyntaxTree {
     public interface JsonAst {
@@ -44,10 +45,6 @@ public class AbstractSyntaxTree {
             throw new RuntimeException(String.format("Can not convert %s to an array", this));
         }
         
-        default <T> List<T> listOf(Function<JsonAst,T> mapper){
-            return list().stream().map(mapper).collect(Collectors.toList());
-        }
-
         default Map<String, JsonAst> map() {
             throw new RuntimeException(String.format("Can not convert %s to an object", this));
         }
@@ -61,6 +58,10 @@ public class AbstractSyntaxTree {
         default Optional<Long> oLong() {return oBigDecimal().map(BigDecimal::longValue);}
         default Optional<Double> oDouble() {return oBigDecimal().map(BigDecimal::doubleValue);}
         default Optional<Float> oFloat() {return oBigDecimal().map(BigDecimal::floatValue);}
+        default <T> List<T> listOf(Function<JsonAst,T> mapper){
+            return stream().map(mapper).collect(Collectors.toList());
+        }
+        default Stream<JsonAst> stream(){return list().stream();}
     }
 
     public static class JsonString implements JsonAst {
