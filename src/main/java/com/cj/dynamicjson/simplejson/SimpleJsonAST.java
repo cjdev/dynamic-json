@@ -24,7 +24,7 @@ public class SimpleJsonAST implements JsonAst{
     
     @Override
     public String aString() {
-       return tryCatch(()->jsonValue.toString()).orElse("null");
+       return tryCatch(()->jsonValue.toString()).orElse(null);
     }
 
     @Override
@@ -39,17 +39,33 @@ public class SimpleJsonAST implements JsonAst{
 
     @Override
     public Optional<BigDecimal> oBigDecimal() {
-        return oString().map(BigDecimal::new);
+        //instanceof is nasty, but no choice if we don't have type information
+        if(jsonValue instanceof Boolean){
+            if((Boolean) jsonValue) {
+                return Optional.of(BigDecimal.ONE);
+            } else {
+                return Optional.of(BigDecimal.ZERO);
+            }
+        } else {
+            return oString().map(BigDecimal::new);
+        }
     }
 
     @Override
     public Boolean aBoolean() {
-        return (Boolean)jsonValue;
+        //instanceof is nasty, but no choice if we don't have type information
+        if(jsonValue == null) {
+            return null;
+        } else if(jsonValue instanceof Boolean) {
+            return (Boolean)jsonValue;
+        } else {
+            return !(jsonValue.toString().equalsIgnoreCase("false") || jsonValue.toString().equalsIgnoreCase("0"));
+        }
     }
 
     @Override
     public Optional<Boolean> oBoolean() {
-        return tryCatch(()->aBoolean());
+        return tryCatch(this::aBoolean);
     }
 
     @Override

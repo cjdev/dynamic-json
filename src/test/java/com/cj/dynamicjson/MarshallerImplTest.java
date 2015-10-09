@@ -10,9 +10,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
@@ -185,5 +183,21 @@ public class MarshallerImplTest {
         assertThat(marshaller.parse("\"foo\"").oString(), is(Optional.of("foo")));
         assertThat(marshaller.parse("true").oBoolean(), is(Optional.of(true)));
         assertThat(marshaller.parse("false").oBoolean(), is(Optional.of(false)));
+    }
+
+    @Test
+    public void typeCoercionBehavior(){
+        assertThat(marshaller.parse("\"123.45\"").aBigDecimal(), is(new BigDecimal("123.45")));
+        assertThat(marshaller.parse("\"false\"").aBoolean(), is(false));
+        assertThat(marshaller.parse("\"null\"").aString(), is("null"));
+        assertThat(marshaller.parse("123.45").aString(), is("123.45"));
+        assertThat(marshaller.parse("true").aString(), is("true"));
+        assertThat(marshaller.parse("null").aString(), is((String)null));
+        assertThat(marshaller.parse("null").aBigDecimal(), is((BigDecimal)null));
+        assertThat(marshaller.parse("null").aBoolean(), is((Boolean)null));
+        assertThat(marshaller.parse("123.45").aBoolean(), is(true));
+        assertThat(marshaller.parse("0").aBoolean(), is(false));
+        assertThat(marshaller.parse("true").aBigDecimal(), is(BigDecimal.ONE));
+        assertThat(marshaller.parse("false").aBigDecimal(), is(BigDecimal.ZERO));
     }
 }
