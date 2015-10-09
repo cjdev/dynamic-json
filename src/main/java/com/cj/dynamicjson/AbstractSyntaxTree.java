@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class AbstractSyntaxTree {
     public interface JsonAst {
@@ -40,6 +42,10 @@ public class AbstractSyntaxTree {
 
         default List<JsonAst> list() {
             throw new RuntimeException(String.format("Can not convert %s to an array", this));
+        }
+        
+        default <T> List<T> listOf(Function<JsonAst,T> mapper){
+            return list().stream().map(mapper).collect(Collectors.toList());
         }
 
         default Map<String, JsonAst> map() {
