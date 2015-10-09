@@ -9,20 +9,15 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
 public class MarshallerImpl{
-    private final JSONParser parser;
+    private MarshallerImpl(){}
     
-    public MarshallerImpl() {
-        parser = new JSONParser();
-    }
-
-
-    public SimpleJsonAST parse(String jsonText) {
+    public static SimpleJsonAST parse(String jsonText) {
         return parse(new ByteArrayInputStream(jsonText.getBytes(StandardCharsets.UTF_8)));
     }
 
-    public SimpleJsonAST parse(InputStream jsonText) {
+    public static SimpleJsonAST parse(InputStream jsonText) {
         try {
-            return new SimpleJsonAST((Object)parser.parse(new InputStreamReader(jsonText, "UTF-8")));
+            return new SimpleJsonAST((Object)new JSONParser().parse(new InputStreamReader(jsonText, "UTF-8")));
         } catch (Exception e) {
             throw new JsonParseException("Error Parsing Json", e);
         }
