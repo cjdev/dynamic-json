@@ -49,6 +49,12 @@ public class AbstractSyntaxTree {
         default JsonObject object(){
             return new JsonObject(map());
         }
+        
+        /* ***********Convenience Methods For Accessing Primitives ***************************** */
+        default Optional<Integer> oInteger() {return oBigDecimal().map(BigDecimal::intValue);}
+        default Optional<Long> oLong() {return oBigDecimal().map(BigDecimal::longValue);}
+        default Optional<Double> oDouble() {return oBigDecimal().map(BigDecimal::doubleValue);}
+        default Optional<Float> oFloat() {return oBigDecimal().map(BigDecimal::floatValue);}
     }
 
     public static class JsonString implements JsonAst {
