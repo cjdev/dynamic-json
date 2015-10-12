@@ -15,6 +15,8 @@ import org.json.simple.JSONObject;
 
 import com.cj.dynamicjson.AbstractSyntaxTree.JsonAst;
 
+import javax.swing.text.html.Option;
+
 public class SimpleJsonAST implements JsonAst{
  final Object jsonValue;
     
@@ -47,7 +49,11 @@ public class SimpleJsonAST implements JsonAst{
                 return Optional.of(BigDecimal.ZERO);
             }
         } else {
-            return oString().map(BigDecimal::new);
+            try {
+                return oString().map(BigDecimal::new);
+            }catch(NumberFormatException e){
+                return Optional.empty();
+            }
         }
     }
 

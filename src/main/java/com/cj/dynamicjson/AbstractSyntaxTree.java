@@ -21,7 +21,12 @@ public class AbstractSyntaxTree {
         }
 
         default Optional<BigDecimal> oBigDecimal() {
-            return Optional.ofNullable(aBigDecimal());
+            try {
+                return Optional.ofNullable(aBigDecimal());
+            }catch (NumberFormatException e){
+                return Optional.empty();
+            }
+
         }
 
         default Boolean aBoolean() {

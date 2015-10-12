@@ -171,7 +171,7 @@ public class MarshallerImplTest {
         assertThat(ast.oBoolean().isPresent(), is(false));
     }
 
-    @Test @Ignore
+    @Test
     public void stringCanBeANumber_RobustnessPrincipal() {
         String jsonText = "{\"number\":\"4\"}";
         assertThat(marshaller.parse(jsonText).map().get("number").aBigDecimal(), is(new BigDecimal(4)));
@@ -202,10 +202,16 @@ public class MarshallerImplTest {
     }
 
     @Test
+    public void typeCoercionBehaviorForOptionals(){
+        assertThat(marshaller.parse("{\"number\":\"\"}").object().get("number").oBigDecimal(), is(Optional.empty()));
+    }
+
+    @Test
     public void otherNumericTypes(){
         assertThat(marshaller.parse("123").oLong().get(), is(123L));
         assertThat(marshaller.parse("123").oInteger().get(), is(123));
         assertThat(marshaller.parse("123.45").oFloat().get(), is(123.45F));
         assertThat(marshaller.parse("123.45").oDouble().get(), is(123.45));
     }
+
 }
