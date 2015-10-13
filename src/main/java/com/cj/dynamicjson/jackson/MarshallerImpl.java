@@ -44,6 +44,9 @@ public class MarshallerImpl implements Marshaller {
         } else if (token == JsonToken.VALUE_NUMBER_FLOAT) {
             result = new JsonNumber(parser.getDecimalValue());
             consumeToken(parser, JsonToken.VALUE_NUMBER_FLOAT);
+        } else if (token == JsonToken.VALUE_NUMBER_INT) {
+            result = new JsonNumber(parser.getDecimalValue());
+            consumeToken(parser, JsonToken.VALUE_NUMBER_INT);
         } else if (token == JsonToken.VALUE_TRUE) {
             result = new JsonBoolean(true);
             consumeToken(parser, JsonToken.VALUE_TRUE);

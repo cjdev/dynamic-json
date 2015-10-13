@@ -1,12 +1,7 @@
 package com.cj.dynamicjson;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,7 +21,12 @@ public class AbstractSyntaxTree {
         }
 
         default Optional<BigDecimal> oBigDecimal() {
-            return Optional.ofNullable(aBigDecimal());
+            try {
+                return Optional.ofNullable(aBigDecimal());
+            }catch (NumberFormatException e){
+                return Optional.empty();
+            }
+
         }
 
         default Boolean aBoolean() {
@@ -90,6 +90,16 @@ public class AbstractSyntaxTree {
         public String toString() {
             return String.format("String(%s)", value);
         }
+
+        @Override
+        public BigDecimal aBigDecimal() {
+            return new BigDecimal(value);
+        }
+
+        @Override
+        public Boolean aBoolean() {
+            return Boolean.parseBoolean(value);
+        }
     }
 
     public static class JsonNumber implements JsonAst {
@@ -108,6 +118,16 @@ public class AbstractSyntaxTree {
         public String toString() {
             return String.format("Number(%s)", value);
         }
+
+        @Override
+        public String aString() {
+            return value.toString();
+        }
+
+        @Override
+        public Boolean aBoolean() {
+            return !BigDecimal.ZERO.equals(value);
+        }
     }
 
     public static class JsonBoolean implements JsonAst {
@@ -125,6 +145,20 @@ public class AbstractSyntaxTree {
         @Override
         public String toString() {
             return String.format("Boolean(%s)", value);
+        }
+
+        @Override
+        public String aString() {
+            return Boolean.valueOf(value).toString();
+        }
+
+        @Override
+        public BigDecimal aBigDecimal() {
+            if(value) {
+                return BigDecimal.ONE;
+            } else {
+                return BigDecimal.ZERO;
+            }
         }
     }
 
