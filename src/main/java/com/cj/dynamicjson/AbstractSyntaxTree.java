@@ -41,10 +41,20 @@ public class AbstractSyntaxTree {
             return false;
         }
 
+        /**
+         * This may be deprecated soon.  Consider using either listOf() or stream() instead 
+         * because you'll probably find that it makes your code less verbose.
+         * @return
+         */
         default List<JsonAst> list() {
             throw new RuntimeException(String.format("Can not convert %s to an array", this));
         }
         
+        /**
+         * @return
+         * @deprecated This may become a private method soon because it is not useful.  Use object() instead.
+         */
+        @Deprecated
         default Map<String, JsonAst> map() {
             throw new RuntimeException(String.format("Can not convert %s to an object", this));
         }
@@ -186,7 +196,7 @@ public class AbstractSyntaxTree {
             this.object = Collections.unmodifiableMap(new HashMap<>(object));
         }
 
-        @Override
+        @Override @Deprecated
         public Map<String, JsonAst> map() {
             return object;
         }

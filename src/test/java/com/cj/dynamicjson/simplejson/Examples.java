@@ -14,22 +14,29 @@ import org.junit.Test;
 
 import com.cj.dynamicjson.AbstractSyntaxTree.JsonAst;
 import com.cj.dynamicjson.AbstractSyntaxTree.JsonObject;
+import com.cj.dynamicjson.JsonParser;
 
 public class Examples {
-    Function<JsonAst, Book> mapper = bookRow -> {
-        Book bookToReturn = new Book();
-        JsonObject book = bookRow.object();
-        bookToReturn.price = book.oGet("price").flatMap(JsonAst::oBigDecimal).orElse(BigDecimal.valueOf(Double.MAX_VALUE));
-        bookToReturn.title = book.oGet("Title").flatMap(JsonAst::oString).orElse("No Title Found");
-        bookToReturn.authors = book.oGet("authors").map(e->e.list().stream().map(JsonAst::toString).collect(Collectors.toList())).orElse(Collections.emptyList());
-        return bookToReturn;
-    };
-
     final String books = TestHelper.loadResourceAsString("books-sample.json");
 
     @Test
+    public void aSimpleExample(){
+        String json = "{\"name\":\"Abraham\", \"children\":[\"Robert\", \"Edward\", \"William\", \"Thomas\"]}";
+        JsonObject person = JsonParser.parse(json).object();
+        assertEquals("Abraham", person.get("name").aString());
+        
+        List<String> children = person.get("children").listOf(JsonAst::aString);
+        
+        assertEquals("Robert", children.get(0));
+        assertEquals("Edward", children.get(1));
+        assertEquals("William", children.get(2));
+        assertEquals("Thomas", children.get(3));
+        
+    }
+    
+    @Test
     public void findCheapestBookStream() {
-      Optional<Double> price = Marshaller.instance.parse(books).list().stream()
+      Optional<Double> price = JsonParser.parse(books).list().stream()
               .map(book -> book.object().oGet("price").flatMap(JsonAst::oBigDecimal).orElse(BigDecimal.valueOf(Double.MAX_VALUE)))
               .min(BigDecimal::compareTo)
               .map(BigDecimal::doubleValue);
@@ -39,8 +46,8 @@ public class Examples {
 
     @Test
     public void findAllBooksWrittenByJim() {
-        List<String> booksByJim =  Marshaller.instance.parse(books).list().stream()
-              .filter(book -> book.object().get("authors").list().stream().map(JsonAst::toString).collect(Collectors.toList()).contains("Jim Houndface"))
+        List<String> booksByJim =  JsonParser.parse(books).stream()
+              .filter(book -> book.object().get("authors").listOf(JsonAst::toString).contains("Jim Houndface"))
               .map(book -> book.object().get("title").oString().orElse("No Title Found"))
               .collect(Collectors.toList());
         
@@ -50,15 +57,31 @@ public class Examples {
 
     @Test
     public void toDto() {
-        List<Book> bookObjects =  Marshaller.instance.parse(books).list().stream().map(mapper).collect(Collectors.toList());
+        List<Book> bookObjects =  JsonParser.parse(books).listOf(Book::jsonToBook);
         assertEquals(3, bookObjects.size());
         assertEquals(2, bookObjects.get(1).authors.size());
     }
 
-    class Book {
-        public List<String> authors;
-        public BigDecimal price;
-        public String title;
+    static class Book {
+        public final List<String> authors;
+        public final BigDecimal price;
+        public final String title;
+        public Book(List<String> authors, BigDecimal price, String title){
+            this.authors = authors;
+            this.price = price;
+            this.title = title;
+        }
+        
+        public static Book jsonToBook(JsonAst json){
+            JsonObject book = json.object();
+            BigDecimal price = book.oGet("price").flatMap(JsonAst::oBigDecimal).orElse(BigDecimal.valueOf(Double.MAX_VALUE));
+            String title = book.oGet("Title").flatMap(JsonAst::oString).orElse("No Title Found");
+            List<String> authors = book.oGet("authors").map(e->e.listOf(JsonAst::toString)).orElse(Collections.emptyList());
+            return new Book(authors, price, title);
+        }
+        
     }
+    
+
 
 }
