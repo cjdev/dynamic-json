@@ -1,6 +1,7 @@
 # dynamic-json
 Easy JSON parsing with a liberal application of Java Streams and Optionals.  Here's an example:
-'''java
+
+```java
 @Test
 public void aSimpleExample(){
     String json = "{\"name\":\"Abraham\", \"children\":[\"Robert\", \"Edward\", \"William\", \"Thomas\"]}";
@@ -15,7 +16,7 @@ public void aSimpleExample(){
     assertEquals("Thomas", children.get(3));
     
 }
-'''
+```
 
 More examples can be found in the <a href='https://github.com/cjdev/dynamic-json/blob/master/src/test/java/com/cj/dynamicjson/simplejson/Examples.java'>Examples.java source file</a>.
 
