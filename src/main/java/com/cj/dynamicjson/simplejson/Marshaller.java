@@ -18,7 +18,7 @@ public class Marshaller implements com.cj.dynamicjson.Marshaller {
 
     public SimpleJsonAST parse(InputStream jsonText) {
         try {
-            return new SimpleJsonAST((Object)new JSONParser().parse(new InputStreamReader(jsonText, "UTF-8")));
+            return new SimpleJsonAST(new JSONParser().parse(new InputStreamReader(jsonText, "UTF-8")));
         } catch (Exception e) {
             throw new JsonParseException("Error Parsing Json", e);
         }
