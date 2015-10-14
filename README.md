@@ -62,6 +62,38 @@ public void findAllBooksWrittenByJim() {
 }
 ```
 
+<H1>Working With DTOs</H1>
+Here's how to hydrate the above JSON into a DTO
+```java
+static class Book {
+    public final List<String> authors;
+    public final BigDecimal price;
+    public final String title;
+    public Book(List<String> authors, BigDecimal price, String title){
+        this.authors = authors;
+        this.price = price;
+        this.title = title;
+    }
+        
+    public static Book jsonToBook(JsonAst json){
+        JsonObject book = json.object();
+        BigDecimal price = book.oGet("price").flatMap(JsonAst::oBigDecimal).orElse(BigDecimal.valueOf(Double.MAX_VALUE));
+        String title = book.oGet("Title").flatMap(JsonAst::oString).orElse("No Title Found");
+        List<String> authors = book.oGet("authors").map(e->e.listOf(JsonAst::toString)).orElse(Collections.emptyList());
+        return new Book(authors, price, title);
+    }
+        
+}
+
+@Test
+public void toDto() {
+    List<Book> bookObjects =  JsonParser.parse(books).listOf(Book::jsonToBook);
+    assertEquals(3, bookObjects.size());
+    assertEquals(2, bookObjects.get(1).authors.size());
+}
+```
+
+
 
 More examples can be found in the <a href='https://github.com/cjdev/dynamic-json/blob/master/src/test/java/com/cj/dynamicjson/simplejson/Examples.java'>Examples.java source file</a>.
 
