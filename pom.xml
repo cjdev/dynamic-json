@@ -2,9 +2,9 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cj</groupId>
-    <artifactId>json-mapper</artifactId>
+    <artifactId>dynamic-json</artifactId>
     <packaging>jar</packaging>
-    <name>Library for working with JSON using Java 8 Streams and Lambdas</name>
+    <name>Library for working with JSON using Java 8 Streams and Optionals</name>
     <version>3.4.1-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

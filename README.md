@@ -1,5 +1,5 @@
 # dynamic-json
-Easy JSON parsing with a liberal application of Java Streams and Optionals.  
+Easy Java JSON parsing with a liberal application of Streams and Optionals.  
 
 <H1>Basic Example</H1>
 ```java
