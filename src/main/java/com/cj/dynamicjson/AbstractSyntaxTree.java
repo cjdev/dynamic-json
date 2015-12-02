@@ -238,6 +238,10 @@ public class AbstractSyntaxTree {
         public JsonAst get(String key){
             return oGet(key).orElse(JsonNull.instance);
         }
+        
+        public Set<String> keys(){
+            return object.keySet();
+        }
 
         public Optional<JsonAst> oGet(String key){
             return Optional.ofNullable(map().get(key));
