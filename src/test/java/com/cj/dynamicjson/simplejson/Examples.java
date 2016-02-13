@@ -7,14 +7,13 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
 
 import com.cj.dynamicjson.AbstractSyntaxTree.JsonAst;
 import com.cj.dynamicjson.AbstractSyntaxTree.JsonObject;
-import com.cj.dynamicjson.JsonParser;
+import com.cj.dynamicjson.factory.JsonParser;
 
 public class Examples {
     final String books = TestHelper.loadResourceAsString("books-sample.json");

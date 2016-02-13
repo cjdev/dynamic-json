@@ -1,4 +1,4 @@
-package com.cj.dynamicjson;
+package com.cj.dynamicjson.factory;
 
 import java.io.InputStream;
 
