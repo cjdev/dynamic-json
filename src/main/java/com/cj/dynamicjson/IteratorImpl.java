@@ -1,24 +1,22 @@
 package com.cj.dynamicjson;
 
-import java.util.function.Supplier;
-
 public class IteratorImpl<T> implements java.util.Iterator<T> {
 
-    private final Supplier<T> nextFunction;
-    private final Supplier<Boolean> hasNextFunction;
+    private final ThrowingSupplier<T> nextFunction;
+    private final ThrowingSupplier<Boolean> hasNextFunction;
 
-    public IteratorImpl(Supplier<T> next, Supplier<Boolean> hasNext){
+    public IteratorImpl(ThrowingSupplier<T> next, ThrowingSupplier<Boolean> hasNext){
         this.nextFunction = next;
         this.hasNextFunction = hasNext;
     }
 
     @Override
     public boolean hasNext() {
-        return hasNextFunction.get();
+        return Try.to(hasNextFunction).orElse(false);
     }
 
     @Override
     public T next() {
-        return nextFunction.get();
+        return Try.to(nextFunction).orElseThrow(()->new RuntimeException("Trouble Calling The Next Function"));
     }
 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -19,6 +18,7 @@ public interface Marshaller {
 
     JsonAst parse(InputStream jsonText);
 
+    //TODO: This needs a test.
     default Stream<AbstractSyntaxTree.JsonAst> parseList(String jsonText) {
 
         JsonFactory f = new MappingJsonFactory();
@@ -32,18 +32,15 @@ public interface Marshaller {
                 throw new RuntimeException("bad json");
             }
 
-            Supplier<Boolean> hasNext = () -> {
-                return Try.to(()->jp.nextToken() != JsonToken.END_ARRAY).orElseThrow(()->new RuntimeException("Error Parsing Json"));
-            };
-
-            Supplier<JsonAst> next = () -> {
-                return Try.to(()->{
-                    JsonNode node = jp.readValueAsTree();
-                    return parse(node.toString());
-                }).orElseThrow(()->new RuntimeException("Error Parsing Json"));
-            };
-
-            IteratorImpl<JsonAst> iterator = new IteratorImpl<>(next, hasNext);
+            IteratorImpl<JsonAst> iterator = new IteratorImpl<>(
+                    () -> {
+                        JsonNode node = jp.readValueAsTree();
+                        jp.nextToken(); //Move to the next tree.
+                        return parse(node.toString());  
+                    }, () -> {
+                        return jp.getCurrentToken() != JsonToken.END_ARRAY; 
+                    });
+            
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false);
 
         } catch(IOException e) {
