@@ -1,7 +1,12 @@
 package com.cj.dynamicjson;
 
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 public class IteratorBuilder<T>  {
-    Iterator internalIterator = new Iterator();
+    Iterator<T> internalIterator = new Iterator<T>();
     public IteratorBuilder<T> withNext(ThrowingSupplier<T> supplier){
         internalIterator.nextFunction =  supplier;
         return this;
@@ -12,14 +17,19 @@ public class IteratorBuilder<T>  {
         return this;
     }
     
-    public Iterator iterator(){
+    public Iterator<T> iterator(){
         if (internalIterator.hasNextFunction ==null || internalIterator.nextFunction ==null){
             throw new RuntimeException("You must set both next and hasNext before calling iterator()");
         }
         return internalIterator;
     }
     
-    private class Iterator implements java.util.Iterator<T>{
+    public Stream<T> stream(){
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator(), Spliterator.ORDERED), false);
+    }
+    
+    @SuppressWarnings("hiding")
+    private class Iterator<T> implements java.util.Iterator<T>{
         private ThrowingSupplier<T> nextFunction;
         private ThrowingSupplier<Boolean> hasNextFunction;
     

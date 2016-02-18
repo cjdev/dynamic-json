@@ -40,7 +40,7 @@ public interface Marshaller {
             
             jp.nextToken();
 
-            Iterator<JsonAst> iterator = new IteratorBuilder<JsonAst>()
+            return new IteratorBuilder<JsonAst>()
                 .withNext(()->{
                     JsonNode node = jp.readValueAsTree();
                     jp.nextToken(); //Move to the next tree.
@@ -49,9 +49,7 @@ public interface Marshaller {
                 .withHasNext(() -> {
                     return jp.getCurrentToken() !=null && jp.getCurrentToken() != JsonToken.END_ARRAY; 
                     })
-                .iterator();
-
-            return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false);
+                .stream();
 
         } catch(IOException e) {
             throw new RuntimeException(e);
