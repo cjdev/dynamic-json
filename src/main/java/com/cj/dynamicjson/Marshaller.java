@@ -18,7 +18,12 @@ public interface Marshaller {
 
     JsonAst parse(InputStream jsonText);
 
-    //TODO: This needs a test.
+    /**
+     * While the other parse methods in this class will parse JSON lists, this one will only process one element of the list at a time
+     * to prevent consuming too much memory when the input is large.
+     * @param json
+     * @return
+     */
     default Stream<AbstractSyntaxTree.JsonAst> parseList(InputStream json) {
 
         JsonFactory f = new MappingJsonFactory();
