@@ -1,17 +1,27 @@
 package com.cj.dynamicjson;
 
-import com.cj.dynamicjson.jackson.MarshallerImpl;
-import org.junit.Ignore;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.*;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import com.cj.dynamicjson.jackson.MarshallerImpl;
 
 @RunWith(Parameterized.class)
 public class MarshallerImplTest {
@@ -75,6 +85,17 @@ public class MarshallerImplTest {
         assertThat(ast.isNull(), is(false));
         assertThat(list.size(), is(0));
     }
+    
+    @Test
+    public void emptyArrayUsingParseArray() {
+        String jsonText = "[]";
+        Stream<AbstractSyntaxTree.JsonAst> asts = marshaller.parseList(asInputStream(jsonText));
+        assertThat(asts.count(), is(0L));
+    }
+
+    private InputStream asInputStream(String string) {
+        return new ByteArrayInputStream(string.getBytes(StandardCharsets.UTF_8));
+    }
 
     @Test
     public void arrayWithOneElement() {
@@ -82,6 +103,15 @@ public class MarshallerImplTest {
         AbstractSyntaxTree.JsonAst ast = marshaller.parse(jsonText);
         List<AbstractSyntaxTree.JsonAst> list = ast.list();
         assertThat(ast.isNull(), is(false));
+        assertThat(list.size(), is(1));
+        assertThat(list.get(0).aString(), is("foo"));
+    }
+    
+    @Test
+    public void arrayWithOneElementUsingParseArray() {
+        String jsonText = "[ \"foo\" ]";
+        Stream<AbstractSyntaxTree.JsonAst> ast = marshaller.parseList(asInputStream(jsonText));
+        List<AbstractSyntaxTree.JsonAst> list = ast.collect(Collectors.toList());
         assertThat(list.size(), is(1));
         assertThat(list.get(0).aString(), is("foo"));
     }
@@ -96,6 +126,17 @@ public class MarshallerImplTest {
         assertThat(list.get(0).aString(), is("foo"));
         assertThat(list.get(1).aBigDecimal(), is(new BigDecimal("123.456")));
         assertThat(list.get(2).aBoolean(), is(false));
+    }
+    
+    @Test
+    public void arrayWithSomeElementsUsingParseList() {
+        String jsonText = "[ \"foo\", {\"o\":123.456}, 123.456, false]";
+        List<AbstractSyntaxTree.JsonAst> list = marshaller.parseList(asInputStream(jsonText)).collect(Collectors.toList());
+        assertThat(list.size(), is(4));
+        assertThat(list.get(0).aString(), is("foo"));
+        assertThat(list.get(1).object().get("o").aBigDecimal(), is(new BigDecimal("123.456")));
+        assertThat(list.get(2).aBigDecimal(), is(new BigDecimal("123.456")));
+        assertThat(list.get(3).aBoolean(), is(false));
     }
 
     @Test

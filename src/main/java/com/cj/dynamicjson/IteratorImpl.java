@@ -12,11 +12,20 @@ public class IteratorImpl<T> implements java.util.Iterator<T> {
 
     @Override
     public boolean hasNext() {
-        return Try.to(hasNextFunction).orElse(false);
+        try{
+            return hasNextFunction.get();
+        }catch(Exception e){
+            throw new RuntimeException("Trouble Calling The hasNext Function", e);
+        }
+        
     }
 
     @Override
     public T next() {
-        return Try.to(nextFunction).orElseThrow(()->new RuntimeException("Trouble Calling The Next Function"));
+        try{
+            return nextFunction.get();
+        }catch(Exception e){
+            throw new RuntimeException("Trouble Calling The Next Function", e);
+        }
     }
 }

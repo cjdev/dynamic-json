@@ -19,18 +19,20 @@ public interface Marshaller {
     JsonAst parse(InputStream jsonText);
 
     //TODO: This needs a test.
-    default Stream<AbstractSyntaxTree.JsonAst> parseList(String jsonText) {
+    default Stream<AbstractSyntaxTree.JsonAst> parseList(InputStream json) {
 
         JsonFactory f = new MappingJsonFactory();
 
         try {
             // using Jackson to stream the parsing since it's better at it than simple JSONParser
-            com.fasterxml.jackson.core.JsonParser jp = f.createParser(jsonText);
+            com.fasterxml.jackson.core.JsonParser jp = f.createParser(json);
             JsonToken current = jp.nextToken();
 
             if(current != JsonToken.START_ARRAY) {
                 throw new RuntimeException("bad json");
             }
+            
+            jp.nextToken();
 
             IteratorImpl<JsonAst> iterator = new IteratorImpl<>(
                     () -> {
@@ -38,7 +40,7 @@ public interface Marshaller {
                         jp.nextToken(); //Move to the next tree.
                         return parse(node.toString());  
                     }, () -> {
-                        return jp.getCurrentToken() != JsonToken.END_ARRAY; 
+                        return jp.getCurrentToken() !=null && jp.getCurrentToken() != JsonToken.END_ARRAY; 
                     });
             
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false);
