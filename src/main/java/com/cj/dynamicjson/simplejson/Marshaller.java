@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import com.cj.dynamicjson.AbstractSyntaxTree;
-import com.cj.dynamicjson.IteratorWrapper;
+import com.cj.dynamicjson.IteratorImpl;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
