@@ -1,21 +1,10 @@
 package com.cj.dynamicjson.simplejson;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
-import com.cj.dynamicjson.AbstractSyntaxTree;
-import com.cj.dynamicjson.IteratorImpl;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MappingJsonFactory;
 import org.json.simple.parser.JSONParser;
 
 public class Marshaller implements com.cj.dynamicjson.Marshaller {

@@ -2,6 +2,7 @@ package com.cj.dynamicjson;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -24,7 +25,7 @@ public interface Marshaller {
      * @param json
      * @return
      */
-    default Stream<AbstractSyntaxTree.JsonAst> parseList(InputStream json) {
+    default Stream<JsonAst> parseList(InputStream json) {
 
         JsonFactory f = new MappingJsonFactory();
 
@@ -39,15 +40,17 @@ public interface Marshaller {
             
             jp.nextToken();
 
-            IteratorImpl<JsonAst> iterator = new IteratorImpl<>(
-                    () -> {
-                        JsonNode node = jp.readValueAsTree();
-                        jp.nextToken(); //Move to the next tree.
-                        return parse(node.toString());  
-                    }, () -> {
-                        return jp.getCurrentToken() !=null && jp.getCurrentToken() != JsonToken.END_ARRAY; 
-                    });
-            
+            Iterator<JsonAst> iterator = new IteratorBuilder<JsonAst>()
+                .withNext(()->{
+                    JsonNode node = jp.readValueAsTree();
+                    jp.nextToken(); //Move to the next tree.
+                    return parse(node.toString());  
+                    })
+                .withHasNext(() -> {
+                    return jp.getCurrentToken() !=null && jp.getCurrentToken() != JsonToken.END_ARRAY; 
+                    })
+                .iterator();
+
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false);
 
         } catch(IOException e) {
