@@ -1,22 +1,19 @@
 package com.cj.dynamicjson;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
 import com.cj.dynamicjson.AbstractSyntaxTree.JsonAst;
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
 
-public interface Marshaller {
-    JsonAst parse(String jsonText);
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.stream.Stream;
 
+public interface Marshaller {
+
+    JsonAst parse(String jsonText);
     JsonAst parse(InputStream jsonText);
 
     /**
@@ -31,11 +28,11 @@ public interface Marshaller {
 
         try {
             // using Jackson to stream the parsing since it's better at it than simple JSONParser
-            com.fasterxml.jackson.core.JsonParser jp = f.createParser(json);
+            JsonParser jp = f.createParser(json);
             JsonToken current = jp.nextToken();
 
             if(current != JsonToken.START_ARRAY) {
-                throw new RuntimeException("bad json");
+                throw new RuntimeException("bad json - expected: "+JsonToken.START_ARRAY+" but was: "+current);
             }
             
             jp.nextToken();
@@ -48,7 +45,7 @@ public interface Marshaller {
                     })
                 .withHasNext(() -> {
                     return jp.getCurrentToken() !=null && jp.getCurrentToken() != JsonToken.END_ARRAY; 
-                    })
+                })
                 .stream();
 
         } catch(IOException e) {

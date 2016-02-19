@@ -6,19 +6,21 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class IteratorBuilder<T>  {
-    Iterator<T> internalIterator = new Iterator<T>();
+
+    Iterator<T> internalIterator = new Iterator<>();
+
     public IteratorBuilder<T> withNext(ThrowingSupplier<T> supplier){
-        internalIterator.nextFunction =  supplier;
+        internalIterator.nextFunction = supplier;
         return this;
     }
     
     public IteratorBuilder<T> withHasNext(ThrowingSupplier<Boolean> supplier){
-        internalIterator.hasNextFunction=supplier;
+        internalIterator.hasNextFunction = supplier;
         return this;
     }
     
     public Iterator<T> iterator(){
-        if (internalIterator.hasNextFunction ==null || internalIterator.nextFunction ==null){
+        if (internalIterator.hasNextFunction == null || internalIterator.nextFunction == null){
             throw new RuntimeException("You must set both next and hasNext before calling iterator()");
         }
         return internalIterator;
@@ -40,7 +42,6 @@ public class IteratorBuilder<T>  {
             }catch(Exception e){
                 throw new RuntimeException("Trouble Calling The hasNext Function", e);
             }
-            
         }
     
         @Override
