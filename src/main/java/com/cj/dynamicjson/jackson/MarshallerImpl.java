@@ -1,19 +1,43 @@
 package com.cj.dynamicjson.jackson;
 
-import com.cj.dynamicjson.Marshaller;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonToken;
-
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
-import static com.cj.dynamicjson.AbstractSyntaxTree.*;
+import com.cj.dynamicjson.AbstractSyntaxTree.JsonArray;
+import com.cj.dynamicjson.AbstractSyntaxTree.JsonAst;
+import com.cj.dynamicjson.AbstractSyntaxTree.JsonBoolean;
+import com.cj.dynamicjson.AbstractSyntaxTree.JsonNull;
+import com.cj.dynamicjson.AbstractSyntaxTree.JsonNumber;
+import com.cj.dynamicjson.AbstractSyntaxTree.JsonObject;
+import com.cj.dynamicjson.AbstractSyntaxTree.JsonString;
+import com.cj.dynamicjson.Marshaller;
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MarshallerImpl implements Marshaller {
     public static final MarshallerImpl instance = new MarshallerImpl();
+    
+
+    public void writeList(OutputStream out, BiConsumer<JsonGenerator, ObjectMapper> generatorConsumer) throws IOException{
+      ObjectMapper mapper = new ObjectMapper();
+      JsonFactory jsonFactory = mapper.getFactory();
+      JsonGenerator generator = jsonFactory.createGenerator(out, JsonEncoding.UTF8);
+      generator.writeStartArray();
+      generatorConsumer.accept(generator, mapper);
+      generator.writeEndArray();
+      generator.close();
+    }
+    
 
     private MarshallerImpl() {
     }
