@@ -254,5 +254,12 @@ public class MarshallerImplTest {
         assertThat(marshaller.parse("123.45").oFloat().get(), is(123.45F));
         assertThat(marshaller.parse("123.45").oDouble().get(), is(123.45));
     }
+    
+    @Test
+    public void aStringOnAMapConvertsBackToAString() {
+    		String json = "{ \"a\": \"foo\" }";
+    		AbstractSyntaxTree.JsonAst ast = marshaller.parse(json);
+    		assertThat(ast.aString(), is(json));
+    }
 
 }

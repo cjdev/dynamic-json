@@ -12,10 +12,16 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class AbstractSyntaxTree {
     public interface JsonAst {
         default String aString() {
-            throw new RuntimeException(String.format("Can not convert %s to a String", this));
+            try {
+        			return new ObjectMapper().writeValueAsString(this);
+            }catch(Exception e) {
+            		throw new RuntimeException(String.format("Can not convert %s to a String", this), e);
+            }
         }
 
         default Optional<String> oString() {
