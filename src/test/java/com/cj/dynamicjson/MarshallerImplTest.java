@@ -257,9 +257,30 @@ public class MarshallerImplTest {
     
     @Test
     public void aStringOnAMapConvertsBackToAString() {
-    		String json = "{ \"a\": \"foo\" }";
+    		String json = "{\"a\":\"foo\"}";
     		AbstractSyntaxTree.JsonAst ast = marshaller.parse(json);
     		assertThat(ast.aString(), is(json));
+    }
+
+    @Test
+    public void aStringOnAMapOfMapsConvertsBackToAString() {
+        String json = "{\"a\":{\"b\":\"foo\"}}";
+        AbstractSyntaxTree.JsonAst ast = marshaller.parse(json);
+        assertThat(ast.aString(), is(json));
+    }
+
+    @Test
+    public void aStringOnAListBackToAString() {
+        String json = "[1,2,3,[]]";
+        AbstractSyntaxTree.JsonAst ast = marshaller.parse(json);
+        assertThat(ast.aString(), is(json));
+    }
+
+    @Test
+    public void aStringOnAMapOfArraysConvertsBackToAString() {
+        String json = "{\"a\":[{},true,{\"b\":\"good\"}]}";
+        AbstractSyntaxTree.JsonAst ast = marshaller.parse(json);
+        assertThat(ast.aString(), is(json));
     }
 
 }

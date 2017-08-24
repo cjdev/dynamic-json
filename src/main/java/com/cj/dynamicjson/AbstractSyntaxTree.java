@@ -13,15 +13,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class AbstractSyntaxTree {
-    public interface JsonAst {
+    private interface AStringHelper{
+        Object internalAStringPrimitive();
+    }
+
+
+    public interface JsonAst extends AStringHelper{
         default String aString() {
-            try {
-        			return new ObjectMapper().writeValueAsString(this);
-            }catch(Exception e) {
-            		throw new RuntimeException(String.format("Can not convert %s to a String", this), e);
-            }
+            return internalAStringPrimitive().toString();
         }
 
         default Optional<String> oString() {
@@ -94,11 +97,6 @@ public class AbstractSyntaxTree {
         }
 
         @Override
-        public String aString() {
-            return value;
-        }
-
-        @Override
         public String toString() {
             return String.format("String(%s)", value);
         }
@@ -111,6 +109,11 @@ public class AbstractSyntaxTree {
         @Override
         public Boolean aBoolean() {
             return Boolean.parseBoolean(value);
+        }
+
+        @Override
+        public String internalAStringPrimitive() {
+            return value;
         }
     }
 
@@ -131,14 +134,16 @@ public class AbstractSyntaxTree {
             return String.format("Number(%s)", value);
         }
 
-        @Override
-        public String aString() {
-            return value.toString();
-        }
+
 
         @Override
         public Boolean aBoolean() {
             return !BigDecimal.ZERO.equals(value);
+        }
+
+        @Override
+        public Number internalAStringPrimitive() {
+            return value;
         }
     }
 
@@ -160,17 +165,17 @@ public class AbstractSyntaxTree {
         }
 
         @Override
-        public String aString() {
-            return Boolean.valueOf(value).toString();
-        }
-
-        @Override
         public BigDecimal aBigDecimal() {
             if(value) {
                 return BigDecimal.ONE;
             } else {
                 return BigDecimal.ZERO;
             }
+        }
+
+        @Override
+        public Boolean internalAStringPrimitive() {
+            return aBoolean();
         }
     }
 
@@ -214,6 +219,11 @@ public class AbstractSyntaxTree {
         public String toString() {
             return "null";
         }
+
+        @Override
+        public Object internalAStringPrimitive() {
+            return null;
+        }
     }
 
     public static class JsonArray implements JsonAst {
@@ -232,6 +242,16 @@ public class AbstractSyntaxTree {
         public String toString() {
             String contents = array.stream().map(Object::toString).reduce((left, right) -> left + ", " + right).orElse("");
             return String.format("Array(%s)", contents);
+        }
+
+        @Override
+        public String aString(){
+            return JSONArray.toJSONString(internalAStringPrimitive());
+        }
+
+        @Override
+        public List<Object> internalAStringPrimitive() {
+            return array.stream().map(JsonAst::internalAStringPrimitive).collect(Collectors.toList());
         }
     }
 
@@ -272,6 +292,18 @@ public class AbstractSyntaxTree {
             }).reduce((left, right) -> left + ", " + right).orElse("");
 
             return String.format("Object(%s)", contents);
+        }
+
+        @Override
+        public String aString(){
+            return JSONObject.toJSONString(internalAStringPrimitive());
+        }
+
+        @Override
+        public Map<String, Object> internalAStringPrimitive() {
+            return object.keySet().stream()
+                    .collect(Collectors.toMap(Function.identity(),
+                            key -> object.get(key).internalAStringPrimitive()));
         }
     }
 }

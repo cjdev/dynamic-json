@@ -116,5 +116,7 @@ public class SimpleJsonAST implements JsonAst{
     public String toString(){
         return aString();
     }
-    
+
+    @Override
+    public Object internalAStringPrimitive() { return aString(); }
 }
