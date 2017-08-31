@@ -1,5 +1,6 @@
 package com.cj.dynamicjson;
 
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -9,11 +10,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -281,6 +279,14 @@ public class MarshallerImplTest {
         String json = "{\"a\":[{},true,{\"b\":\"good\"}]}";
         AbstractSyntaxTree.JsonAst ast = marshaller.parse(json);
         assertThat(ast.aString(), is(json));
+    }
+
+    @Test
+    public void testParseCanToStringNullsAsObjects(){
+        String json = "{\"nullish\":null}";
+        AbstractSyntaxTree.JsonAst ast = marshaller.parse(json);
+        assertThat(ast.aString(), is(json));
+
     }
 
 }

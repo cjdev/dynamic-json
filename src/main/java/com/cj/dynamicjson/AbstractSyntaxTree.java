@@ -113,7 +113,7 @@ public class AbstractSyntaxTree {
 
         @Override
         public String internalAStringPrimitive() {
-            return value;
+            return value !=null ? value.toString() : "null";
         }
     }
 
@@ -175,7 +175,7 @@ public class AbstractSyntaxTree {
 
         @Override
         public Boolean internalAStringPrimitive() {
-            return aBoolean();
+            return aBoolean().booleanValue();
         }
     }
 
@@ -222,7 +222,7 @@ public class AbstractSyntaxTree {
 
         @Override
         public Object internalAStringPrimitive() {
-            return null;
+            return this;
         }
     }
 
