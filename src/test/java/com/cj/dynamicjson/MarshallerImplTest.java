@@ -100,6 +100,14 @@ public class MarshallerImplTest {
         asts.close();
         assertStreamIsClosed(inputStream);
     }
+    
+    @Test
+    public void fullyConsumingTheStreamClosesItInParseArray() throws IOException {
+    		InputStream inputStream = getClass().getClassLoader().getResource("array-of-simple-map.json").openStream();
+        Stream<AbstractSyntaxTree.JsonAst> asts = marshaller.parseList(inputStream);
+        asts.collect(Collectors.toList());
+        assertStreamIsClosed(inputStream);
+    }
 
     private InputStream asInputStream(String string) {
         return new ByteArrayInputStream(string.getBytes(StandardCharsets.UTF_8));

@@ -40,7 +40,7 @@ public interface Marshaller {
 	    			catch (IOException e) {throw new RuntimeException(e);}
 	    		};
 
-            return new IteratorBuilder<JsonAst>()
+            return AutoClosingStream.autoClosingStream(closer, new IteratorBuilder<JsonAst>()
                 .withNext(()->{
                     JsonNode node = jp.readValueAsTree();
                     jp.nextToken(); //Move to the next tree.
@@ -49,7 +49,7 @@ public interface Marshaller {
                 .withHasNext(() -> {
                     return jp.getCurrentToken() !=null && jp.getCurrentToken() != JsonToken.END_ARRAY; 
                 })
-                .stream().onClose(closer);
+                .stream());
 
         } catch(IOException e) {
             throw new RuntimeException(e);
