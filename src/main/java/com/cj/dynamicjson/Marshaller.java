@@ -1,15 +1,15 @@
 package com.cj.dynamicjson;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.stream.Stream;
+
 import com.cj.dynamicjson.AbstractSyntaxTree.JsonAst;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.stream.Stream;
 
 public interface Marshaller {
 
@@ -23,9 +23,7 @@ public interface Marshaller {
      * @return
      */
     default Stream<JsonAst> parseList(InputStream json) {
-
         JsonFactory f = new MappingJsonFactory();
-
         try {
             // using Jackson to stream the parsing since it's better at it than simple JSONParser
             JsonParser jp = f.createParser(json);
@@ -37,6 +35,11 @@ public interface Marshaller {
             
             jp.nextToken();
 
+	    		Runnable closer = () -> {
+	    			try {json.close();} 
+	    			catch (IOException e) {throw new RuntimeException(e);}
+	    		};
+
             return new IteratorBuilder<JsonAst>()
                 .withNext(()->{
                     JsonNode node = jp.readValueAsTree();
@@ -46,10 +49,12 @@ public interface Marshaller {
                 .withHasNext(() -> {
                     return jp.getCurrentToken() !=null && jp.getCurrentToken() != JsonToken.END_ARRAY; 
                 })
-                .stream();
+                .stream().onClose(closer);
 
         } catch(IOException e) {
             throw new RuntimeException(e);
         }
     }
+    
+    
 }

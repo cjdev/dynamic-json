@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -15,6 +16,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -90,9 +92,26 @@ public class MarshallerImplTest {
         Stream<AbstractSyntaxTree.JsonAst> asts = marshaller.parseList(asInputStream(jsonText));
         assertThat(asts.count(), is(0L));
     }
+    
+    @Test
+    public void canCloseTheUnderlyingStreamInParseArray() throws IOException {
+    		InputStream inputStream = getClass().getClassLoader().getResource("array-of-simple-map.json").openStream();
+        Stream<AbstractSyntaxTree.JsonAst> asts = marshaller.parseList(inputStream);
+        asts.close();
+        assertStreamIsClosed(inputStream);
+    }
 
     private InputStream asInputStream(String string) {
         return new ByteArrayInputStream(string.getBytes(StandardCharsets.UTF_8));
+    }
+    
+    private void assertStreamIsClosed(InputStream inputStream) {
+        try {
+            inputStream.read();
+            Assert.fail("The stream wasn't closed.");
+        } catch (IOException e) {
+            Assert.assertEquals(e.getLocalizedMessage(), "Stream closed");
+        }
     }
 
     @Test
