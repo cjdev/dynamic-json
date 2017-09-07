@@ -19,6 +19,9 @@ public interface Marshaller {
     /**
      * While the other parse methods in this class will parse JSON lists, this one will only process one element of the list at a time
      * to prevent consuming too much memory when the input is large.
+     * 
+     * The stream returned will be automatically closed when it has been fully consumed.
+     * 
      * @param json
      * @return
      */
