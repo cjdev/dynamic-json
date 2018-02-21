@@ -1,37 +1,44 @@
-package com.cj.dynamicjson.simplejson;
+package com.cj.dynamicjson.jackson2;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import java.util.stream.StreamSupport;
 
 import com.cj.dynamicjson.AbstractSyntaxTree.JsonAst;
+import com.fasterxml.jackson.databind.JsonNode;
 
-import javax.swing.text.html.Option;
+public class JacksonAst implements JsonAst{
 
-public class SimpleJsonAST implements JsonAst{
- final Object jsonValue;
-    
-    SimpleJsonAST(Object jsonValue){
-        this.jsonValue = jsonValue;
-    }
-    
+	private final JsonNode rootNode;
+
+	public JacksonAst(JsonNode node) {
+		this.rootNode = node;
+	}
+
     @Override
     public String aString() {
-       return tryCatch(()->jsonValue.toString()).orElse(null);
+       return tryCatch(()->{
+    	   		if(rootNode.isTextual()) return rootNode.textValue();
+    	   		if(rootNode.isNull()) return null;
+    	   		return rootNode.toString();
+    	   		
+    	   }).orElse(null);
     }
 
     @Override
     public Optional<String> oString() {
-        return Optional.ofNullable(jsonValue).map(Object::toString);
+    		if(isNull()) return Optional.empty();
+        return Optional.ofNullable(aString());
     }
 
     @Override
@@ -42,8 +49,8 @@ public class SimpleJsonAST implements JsonAst{
     @Override
     public Optional<BigDecimal> oBigDecimal() {
         //instanceof is nasty, but no choice if we don't have type information
-        if(jsonValue instanceof Boolean){
-            if((Boolean) jsonValue) {
+        if(rootNode.isBoolean()){
+            if(rootNode.asBoolean()) {
                 return Optional.of(BigDecimal.ONE);
             } else {
                 return Optional.of(BigDecimal.ZERO);
@@ -60,12 +67,12 @@ public class SimpleJsonAST implements JsonAst{
     @Override
     public Boolean aBoolean() {
         //instanceof is nasty, but no choice if we don't have type information
-        if(jsonValue == null) {
+        if(isNull()) {
             return null;
-        } else if(jsonValue instanceof Boolean) {
-            return (Boolean)jsonValue;
+        } else if(rootNode.isBoolean()) {
+            return rootNode.asBoolean();
         } else {
-            return !(jsonValue.toString().equalsIgnoreCase("false") || jsonValue.toString().equalsIgnoreCase("0"));
+            return !(rootNode.asText().equalsIgnoreCase("false") || rootNode.asText().equalsIgnoreCase("0"));
         }
     }
 
@@ -76,17 +83,17 @@ public class SimpleJsonAST implements JsonAst{
 
     @Override
     public boolean isNull() {
-        return jsonValue == null;
+        return rootNode == null || rootNode.isNull();
     }
 
+    private <T> Stream<T> stream(Iterator<T> iterator) {
+    	return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED),false);
+    }
+    
     @Override
     public Stream<JsonAst> stream() {
-        return (Stream<JsonAst>) 
-                tryCatch(()->((JSONArray)jsonValue)
-                        .stream()
-                        .map(SimpleJsonAST::new))
-                .orElse(Collections.emptyList().stream());
-        
+    		if (!rootNode.isArray()) return Collections.<JsonAst>emptyList().stream();
+    		return stream(rootNode.elements()).map(JacksonAst::new);
     }
     
     public List<JsonAst> list(){
@@ -96,12 +103,7 @@ public class SimpleJsonAST implements JsonAst{
     //Use object() instead.  This may become private soon.
     @Override @Deprecated
     public Map<String, JsonAst> map() {
-        JSONObject obj = ((JSONObject)jsonValue);
-        return (Map<String, JsonAst>) 
-                tryCatch(()->obj.keySet()
-                        .stream()
-                        .collect(Collectors.toMap(Function.identity(), k->new SimpleJsonAST(obj.get(k)))))
-                .orElse(Collections.emptyMap());
+    		return stream(rootNode.fields()).collect(Collectors.toMap(Entry::getKey, entry->new JacksonAst(entry.getValue())));
     }
     
     private static <T> Optional<T> tryCatch(Supplier<T> function){
@@ -119,4 +121,5 @@ public class SimpleJsonAST implements JsonAst{
 
     @Override
     public Object internalAStringPrimitive() { return aString(); }
+
 }

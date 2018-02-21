@@ -12,11 +12,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.fasterxml.jackson.databind.node.NullNode;
 
 public class AbstractSyntaxTree {
+	
+	private static final ObjectMapper mapper = new ObjectMapper();
+	{
+		mapper.setSerializationInclusion(Include.NON_NULL);
+	}
+	
     private interface AStringHelper{
         Object internalAStringPrimitive();
     }
@@ -222,7 +228,7 @@ public class AbstractSyntaxTree {
 
         @Override
         public Object internalAStringPrimitive() {
-            return this;
+        		return NullNode.instance;
         }
     }
 
@@ -246,7 +252,9 @@ public class AbstractSyntaxTree {
 
         @Override
         public String aString(){
-            return JSONArray.toJSONString(internalAStringPrimitive());
+        		return mapper.valueToTree(internalAStringPrimitive()).toString();
+            //return JSONArray.toJSONString(internalAStringPrimitive());
+        	
         }
 
         @Override
@@ -296,7 +304,7 @@ public class AbstractSyntaxTree {
 
         @Override
         public String aString(){
-            return JSONObject.toJSONString(internalAStringPrimitive());
+        		return mapper.valueToTree(internalAStringPrimitive()).toString();
         }
 
         @Override

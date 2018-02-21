@@ -1,12 +1,11 @@
 package com.cj.dynamicjson.simplejson;
 
-import org.json.simple.JSONValue;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+
 
 public class TestHelper {
     public static String loadResourceAsString(String resourceName) {
@@ -22,11 +21,11 @@ public class TestHelper {
         return stringBuilder.toString();
     }
 
-    public static String normalize(String json) {
-        Object parsed = JSONValue.parse(json);
-        String normalized = JSONValue.toJSONString(parsed);
-        return normalized;
-    }
+//    public static String normalize(String json) {
+//        Object parsed = JSONValue.parse(json);
+//        String normalized = JSONValue.toJSONString(parsed);
+//        return normalized;
+//    }
 
     private static int read(Reader reader) {
         try {

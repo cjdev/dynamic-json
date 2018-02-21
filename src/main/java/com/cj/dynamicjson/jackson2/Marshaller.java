@@ -1,25 +1,27 @@
-package com.cj.dynamicjson.simplejson;
+package com.cj.dynamicjson.jackson2;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-import org.json.simple.parser.JSONParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Marshaller implements com.cj.dynamicjson.Marshaller {
+	private static final ObjectMapper jackson = new ObjectMapper();
     public static final Marshaller instance = new Marshaller();
 
     private Marshaller() {
     }
 
-    public SimpleJsonAST parse(String jsonText) {
+    public JacksonAst parse(String jsonText) {
         return parse(new ByteArrayInputStream(jsonText.getBytes(StandardCharsets.UTF_8)));
     }
 
-    public SimpleJsonAST parse(InputStream jsonText) {
+    public JacksonAst parse(InputStream jsonText) {
+    		
+    	
         try {
-            return new SimpleJsonAST(new JSONParser().parse(new InputStreamReader(jsonText, "UTF-8")));
+            return new JacksonAst(jackson.readTree(jsonText));
         } catch(Exception e) {
             throw new JsonParseException("Error Parsing Json", e);
         }
