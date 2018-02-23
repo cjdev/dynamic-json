@@ -149,14 +149,14 @@
             <id>snapshots</id>
             <uniqueVersion>false</uniqueVersion>
             <name>Nexus Repository</name>
-            <url>dav:http://deployment:deployment123@build105.wl.cj.com:8081/nexus/content/repositories/snapshots</url>
+            <url>dav:http://build105.wl.cj.com:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
 
         <repository>
             <id>releases</id>
             <uniqueVersion>false</uniqueVersion>
             <name>Nexus Repository</name>
-            <url>dav:http://deployment:deployment123@build105.wl.cj.com:8081/nexus/content/repositories/releases</url>
+            <url>dav:http://build105.wl.cj.com:8081/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 
