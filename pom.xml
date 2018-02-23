@@ -131,55 +131,34 @@
         
     </dependencies>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>central</id>
-            <url>http://build105.wl.cj.com:8081/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
     <distributionManagement>
+	<!--
+	     An easy way to supply credentials is to create/update your $HOME/.m2/settings.xml with:
+
+	     <settings>
+		 <servers>
+                     <server>
+                         <id>cj-nexus</id>
+                         <username>[your-username-goes-here]</username>
+                         <password>[your-password-goes-here]</username>
+                     </server>
+                 </serers>
+             </settings>
+
+	-->
         <snapshotRepository>
-            <id>snapshots</id>
+            <id>cj-nexus</id>
             <uniqueVersion>false</uniqueVersion>
             <name>Nexus Repository</name>
-            <url>dav:http://deployment:deployment123@build105.wl.cj.com:8081/nexus/content/repositories/snapshots</url>
+            <url>dav:http://build105.wl.cj.com:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
 
         <repository>
-            <id>releases</id>
+            <id>cj-nexus</id>
             <uniqueVersion>false</uniqueVersion>
             <name>Nexus Repository</name>
-            <url>dav:http://deployment:deployment123@build105.wl.cj.com:8081/nexus/content/repositories/releases</url>
+            <url>dav:http://build105.wl.cj.com:8081/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>http://build105.wl.cj.com:8081/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>snapshots</id>
-            <url>http://build105.wl.cj.com:8081/nexus/content/groups/public</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 </project>
