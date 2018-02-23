@@ -2,6 +2,7 @@
 Easy Java JSON parsing with a liberal application of Streams and Optionals.  
 
 <H1>Basic Example</H1>
+
 ```java
 @Test
 public void aSimpleExample(){
@@ -21,6 +22,7 @@ public void aSimpleExample(){
 
 <H1>Querying Json</H1>
 Given the following json, let's suppose we'd like to find all of the titles of books written by Jim Houndface:
+
 ```json
 [
   {
@@ -49,6 +51,7 @@ Given the following json, let's suppose we'd like to find all of the titles of b
 ]
 ```
 The solution:
+
 ```java
 @Test
 public void findAllBooksWrittenByJim() {
@@ -64,6 +67,7 @@ public void findAllBooksWrittenByJim() {
 
 <H1>Working With DTOs</H1>
 Here's how to hydrate the above JSON into a DTO
+
 ```java
 static class Book {
     public final List<String> authors;
