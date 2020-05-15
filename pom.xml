@@ -131,34 +131,4 @@
         
     </dependencies>
 
-    <distributionManagement>
-	<!--
-	     An easy way to supply credentials is to create/update your $HOME/.m2/settings.xml with:
-
-	     <settings>
-		 <servers>
-                     <server>
-                         <id>cj-nexus</id>
-                         <username>[your-username-goes-here]</username>
-                         <password>[your-password-goes-here]</username>
-                     </server>
-                 </serers>
-             </settings>
-
-	-->
-        <snapshotRepository>
-            <id>cj-nexus</id>
-            <uniqueVersion>false</uniqueVersion>
-            <name>Nexus Repository</name>
-            <url>http://nexus.cj.dev/repository/maven-snapshots</url>
-        </snapshotRepository>
-
-        <repository>
-            <id>cj-nexus</id>
-            <uniqueVersion>false</uniqueVersion>
-            <name>Nexus Repository</name>
-            <url>http://nexus.cj.dev/repository/maven-public</url>
-        </repository>
-    </distributionManagement>
-
 </project>
