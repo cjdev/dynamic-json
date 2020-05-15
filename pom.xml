@@ -5,7 +5,7 @@
     <artifactId>dynamic-json</artifactId>
     <packaging>jar</packaging>
     <name>Library for working with JSON using Java 8 Streams and Optionals</name>
-    <version>4.0.2</version>
+    <version>4.0.3</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <target.jdk>1.8</target.jdk>
