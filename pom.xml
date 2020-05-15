@@ -150,14 +150,14 @@
             <id>cj-nexus</id>
             <uniqueVersion>false</uniqueVersion>
             <name>Nexus Repository</name>
-            <url>dav:http://build105.wl.cj.com:8081/nexus/content/repositories/snapshots</url>
+            <url>http://nexus.cj.dev/repository/maven-snapshots</url>
         </snapshotRepository>
 
         <repository>
             <id>cj-nexus</id>
             <uniqueVersion>false</uniqueVersion>
             <name>Nexus Repository</name>
-            <url>dav:http://build105.wl.cj.com:8081/nexus/content/repositories/releases</url>
+            <url>http://nexus.cj.dev/repository/maven-public</url>
         </repository>
     </distributionManagement>
 
